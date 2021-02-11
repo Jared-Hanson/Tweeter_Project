@@ -7,8 +7,10 @@ import java.util.List;
 import edu.byu.cs.tweeter.BuildConfig;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.User;
+import edu.byu.cs.tweeter.model.service.request.FollowerRequest;
 import edu.byu.cs.tweeter.model.service.request.FollowingRequest;
 import edu.byu.cs.tweeter.model.service.request.LoginRequest;
+import edu.byu.cs.tweeter.model.service.response.FollowerResponse;
 import edu.byu.cs.tweeter.model.service.response.FollowingResponse;
 import edu.byu.cs.tweeter.model.service.response.LoginResponse;
 
@@ -96,6 +98,36 @@ public class ServerFacade {
 
         return new FollowingResponse(responseFollowees, hasMorePages);
     }
+    public FollowerResponse getFollowers(FollowerRequest request) {
+
+        // Used in place of assert statements because Android does not support them
+        if(BuildConfig.DEBUG) {
+            if(request.getLimit() < 0) {
+                throw new AssertionError();
+            }
+
+            if(request.getFollowerAlias() == null) {
+                throw new AssertionError();
+            }
+        }
+
+        List<User> allFollowees = getDummyFollowers();
+        List<User> responseFollowees = new ArrayList<>(request.getLimit());
+
+        boolean hasMorePages = false;
+
+        if(request.getLimit() > 0) {
+            int followeesIndex = getFolloweesStartingIndex(request.getLastFolloweeAlias(), allFollowees);
+
+            for(int limitCounter = 0; followeesIndex < allFollowees.size() && limitCounter < request.getLimit(); followeesIndex++, limitCounter++) {
+                responseFollowees.add(allFollowees.get(followeesIndex));
+            }
+
+            hasMorePages = followeesIndex < allFollowees.size();
+        }
+
+        return new FollowerResponse(responseFollowees, hasMorePages);
+    }
 
     /**
      * Determines the index for the first followee in the specified 'allFollowees' list that should
@@ -136,6 +168,11 @@ public class ServerFacade {
     List<User> getDummyFollowees() {
         return Arrays.asList(user1, user2, user3, user4, user5, user6, user7,
                 user8, user9, user10, user11, user12, user13, user14, user15, user16, user17, user18,
+                user19, user20);
+    }
+
+    List<User> getDummyFollowers() {
+        return Arrays.asList(user15, user16, user17, user18,
                 user19, user20);
     }
 }
