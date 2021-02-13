@@ -10,6 +10,7 @@ import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.service.request.FollowerRequest;
 import edu.byu.cs.tweeter.model.service.request.FollowingRequest;
 import edu.byu.cs.tweeter.model.service.request.LoginRequest;
+import edu.byu.cs.tweeter.model.service.request.RegisterRequest;
 import edu.byu.cs.tweeter.model.service.response.FollowerResponse;
 import edu.byu.cs.tweeter.model.service.response.FollowingResponse;
 import edu.byu.cs.tweeter.model.service.response.LoginResponse;
@@ -53,6 +54,12 @@ public class ServerFacade {
      * @return the login response.
      */
     public LoginResponse login(LoginRequest request) {
+        User user = new User("Test", "User",
+                "https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/donald_duck.png");
+        return new LoginResponse(user, new AuthToken());
+    }
+
+    public LoginResponse register(RegisterRequest request) {
         User user = new User("Test", "User",
                 "https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/donald_duck.png");
         return new LoginResponse(user, new AuthToken());
