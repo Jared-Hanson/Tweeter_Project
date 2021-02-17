@@ -13,12 +13,6 @@
         android:theme="@style/AppTheme.AppBarOverlay"
         android:minHeight="400dp"
         android:id="@+id/title">
-        <Button
-            android:id="@+id/LoginButton"
-            android:layout_width="300sp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/login" />
 
         <Space
             android:layout_width="match_parent"
