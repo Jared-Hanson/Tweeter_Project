@@ -1,19 +1,29 @@
 package edu.byu.cs.tweeter.model.net;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import edu.byu.cs.tweeter.BuildConfig;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Tweet;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.service.request.FollowerRequest;
 import edu.byu.cs.tweeter.model.service.request.FollowingRequest;
 import edu.byu.cs.tweeter.model.service.request.LoginRequest;
 import edu.byu.cs.tweeter.model.service.request.RegisterRequest;
+import edu.byu.cs.tweeter.model.service.request.StoryRequest;
 import edu.byu.cs.tweeter.model.service.response.FollowerResponse;
 import edu.byu.cs.tweeter.model.service.response.FollowingResponse;
 import edu.byu.cs.tweeter.model.service.response.LoginResponse;
+
+import edu.byu.cs.tweeter.model.service.response.StoryResponse;
 
 /**
  * Acts as a Facade to the Tweeter server. All network requests to the server should go through
@@ -44,6 +54,15 @@ public class ServerFacade {
     private final User user18 = new User("Isabel", "Isaacson", FEMALE_IMAGE_URL);
     private final User user19 = new User("Justin", "Jones", MALE_IMAGE_URL);
     private final User user20 = new User("Jill", "Johnson", FEMALE_IMAGE_URL);
+
+    private final Date date1 = new Date(2010, 12, 6);
+    private final Date date2 = new Date(2021, 8, 5);
+    private final Date date3 = new Date(2020, 6, 2);
+
+    private final Tweet tweet1 = new Tweet(user1, "what a tweet eh", date1);
+    private final Tweet tweet2 = new Tweet(user1, "Second Tweet", date2);
+    private final Tweet tweet3 = new Tweet(user1, "What a tweet tweet", date3);
+
 
     /**
      * Performs a login and if successful, returns the logged in user and an auth token. The current
@@ -104,6 +123,58 @@ public class ServerFacade {
         }
 
         return new FollowingResponse(responseFollowees, hasMorePages);
+    }
+    public StoryResponse getStory(StoryRequest request) {
+
+        // Used in place of assert statements because Android does not support them
+        if(BuildConfig.DEBUG) {
+            if(request.getLimit() < 0) {
+                throw new AssertionError();
+            }
+
+            if(request.getUserAlias() == null) {
+                throw new AssertionError();
+            }
+        }
+
+        List<Tweet> allTweets = getDummyTweets();
+        List<Tweet> responseTweets = new ArrayList<>(request.getLimit());
+
+        boolean hasMorePages = false;
+
+        if(request.getLimit() > 0) {
+            int tweetIndex = getTweetStartingIndex(request.getLastTweet(), allTweets);
+
+            for(int limitCounter = 0; tweetIndex < allTweets.size() && limitCounter < request.getLimit(); tweetIndex++, limitCounter++) {
+                responseTweets.add(allTweets.get(tweetIndex));
+            }
+
+            hasMorePages = tweetIndex < allTweets.size();
+        }
+
+        return new StoryResponse(responseTweets, hasMorePages);
+    }
+    private int getTweetStartingIndex(Tweet lastTweet, List<Tweet> allTweets) {
+
+        int tweetIndex = 0;
+
+        if(lastTweet != null) {
+            // This is a paged request for something after the first page. Find the first item
+            // we should return
+            for (int i = 0; i < allTweets.size(); i++) {
+                if(lastTweet.equals(allTweets.get(i))) {
+                    // We found the index of the last item returned last time. Increment to get
+                    // to the first one we should return
+                    tweetIndex = i + 1;
+                    break;
+                }
+            }
+        }
+
+        return tweetIndex;
+    }
+    List<Tweet> getDummyTweets() {
+        return Arrays.asList(tweet1, tweet2, tweet3);
     }
     public FollowerResponse getFollowers(FollowerRequest request) {
 
