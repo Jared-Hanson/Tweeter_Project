@@ -58,10 +58,17 @@ public class ServerFacade {
     private final Date date1 = new Date(2010, 12, 6);
     private final Date date2 = new Date(2021, 8, 5);
     private final Date date3 = new Date(2020, 6, 2);
+    private final Date date4 = new Date(2010, 12, 1);
+    private final Date date5 = new Date(2021, 8, 2);
+    private final Date date6 = new Date(2020, 6, 6);
 
     private final Tweet tweet1 = new Tweet(user1, "what a tweet eh", date1);
     private final Tweet tweet2 = new Tweet(user1, "Second Tweet", date2);
     private final Tweet tweet3 = new Tweet(user1, "What a tweet tweet", date3);
+
+    private final Tweet tweet4 = new Tweet(user3, "I hate dummy data", date4);
+    private final Tweet tweet5 = new Tweet(user5, "Who did that?", date5);
+    private final Tweet tweet6 = new Tweet(user17, "Woah bruh", date6);
 
 
     /**
@@ -154,6 +161,37 @@ public class ServerFacade {
 
         return new StoryResponse(responseTweets, hasMorePages);
     }
+    public StoryResponse getFeed(StoryRequest request) {
+
+        // Used in place of assert statements because Android does not support them
+        if(BuildConfig.DEBUG) {
+            if(request.getLimit() < 0) {
+                throw new AssertionError();
+            }
+
+            if(request.getUserAlias() == null) {
+                throw new AssertionError();
+            }
+        }
+
+        List<Tweet> allTweets = getDummyTweetsFeed();
+        List<Tweet> responseTweets = new ArrayList<>(request.getLimit());
+
+        boolean hasMorePages = false;
+
+        if(request.getLimit() > 0) {
+            int tweetIndex = getTweetStartingIndex(request.getLastTweet(), allTweets);
+
+            for(int limitCounter = 0; tweetIndex < allTweets.size() && limitCounter < request.getLimit(); tweetIndex++, limitCounter++) {
+                responseTweets.add(allTweets.get(tweetIndex));
+            }
+
+            hasMorePages = tweetIndex < allTweets.size();
+        }
+
+        return new StoryResponse(responseTweets, hasMorePages);
+    }
+
     private int getTweetStartingIndex(Tweet lastTweet, List<Tweet> allTweets) {
 
         int tweetIndex = 0;
@@ -176,6 +214,11 @@ public class ServerFacade {
     List<Tweet> getDummyTweets() {
         return Arrays.asList(tweet1, tweet2, tweet3);
     }
+    List<Tweet> getDummyTweetsFeed() {
+        return Arrays.asList(tweet1, tweet2, tweet3, tweet4, tweet5, tweet6);
+    }
+
+
     public FollowerResponse getFollowers(FollowerRequest request) {
 
         // Used in place of assert statements because Android does not support them
