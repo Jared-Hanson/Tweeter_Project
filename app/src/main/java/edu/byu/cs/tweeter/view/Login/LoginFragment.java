@@ -1,4 +1,4 @@
-package edu.byu.cs.tweeter.view;
+package edu.byu.cs.tweeter.view.Login;
 
 import android.content.Intent;
 import android.os.Bundle;

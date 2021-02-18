@@ -32,7 +32,7 @@ public class LoginService {
     private void loadImage(User user) throws IOException {
         byte [] bytes = ByteArrayUtils.bytesFromUrl(user.getImageUrl());
         user.setImageBytes(bytes);
-    }
+    } 
 
     /**
      * Returns an instance of {@link ServerFacade}. Allows mocking of the ServerFacade class for
