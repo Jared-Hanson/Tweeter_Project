@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +35,9 @@ public class ServerFacade {
     private static final String MALE_IMAGE_URL = "https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/donald_duck.png";
     private static final String FEMALE_IMAGE_URL = "https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/daisy_duck.png";
 
+    private final User testUser = new User("Test", "User", MALE_IMAGE_URL);
+    private User currentUser = null;
+
     private final User user1 = new User("Allen", "Anderson", MALE_IMAGE_URL);
     private final User user2 = new User("Amy", "Ames", FEMALE_IMAGE_URL);
     private final User user3 = new User("Bob", "Bobson", MALE_IMAGE_URL);
@@ -55,6 +59,16 @@ public class ServerFacade {
     private final User user19 = new User("Justin", "Jones", MALE_IMAGE_URL);
     private final User user20 = new User("Jill", "Johnson", FEMALE_IMAGE_URL);
 
+    private List<User> loginFollowees = Arrays.asList(user1, user2, user3, user4, user5, user6, user7,
+            user8, user9, user10, user11, user12, user13, user14, user15, user16, user17, user18,
+            user19, user20);
+
+    private final List<User> loginFollowers = Arrays.asList(user3, user4, user5, user6, user7, user15,
+            user16, user17, user18, user19, user20);
+
+    private List<User> registerFollowees = Collections.emptyList();
+    private final List<User> registerFollowers = Collections.emptyList();
+
     private final Date date1 = new Date(2010, 12, 6);
     private final Date date2 = new Date(2021, 8, 5);
     private final Date date3 = new Date(2020, 6, 2);
@@ -62,9 +76,9 @@ public class ServerFacade {
     private final Date date5 = new Date(2021, 8, 2);
     private final Date date6 = new Date(2020, 6, 6);
 
-    private final Tweet tweet1 = new Tweet(user1, "what a tweet eh", date1);
-    private final Tweet tweet2 = new Tweet(user1, "Second Tweet", date2);
-    private final Tweet tweet3 = new Tweet(user1, "What a tweet tweet", date3);
+    private final Tweet tweet1 = new Tweet(testUser, "what a tweet eh", date1);
+    private final Tweet tweet2 = new Tweet(testUser, "Second Tweet", date2);
+    private final Tweet tweet3 = new Tweet(testUser, "What a tweet tweet", date3);
 
     private final Tweet tweet4 = new Tweet(user3, "I hate dummy data", date4);
     private final Tweet tweet5 = new Tweet(user5, "Who did that?", date5);
@@ -80,14 +94,43 @@ public class ServerFacade {
      * @return the login response.
      */
     public LoginResponse login(LoginRequest request) {
-        User user = new User("Test", "User",
-                "https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/donald_duck.png");
-        return new LoginResponse(user, new AuthToken());
+        if (request.getUsername().equals("dummyUserName") && request.getPassword().equals("dummyPassword")) {
+            currentUser = testUser;
+            return new LoginResponse(testUser, new AuthToken());
+        }
+        else {
+            return new LoginResponse("Invalid credentials");
+        }
     }
 
     public LoginResponse register(RegisterRequest request) {
-        User user = new User("Test", "User",
-                "https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/donald_duck.png");
+        if (request.getUsername().equals(testUser.getAlias()) ||
+                request.getUsername().equals(user1.getAlias())||
+                request.getUsername().equals(user2.getAlias())||
+                request.getUsername().equals(user3.getAlias())||
+                request.getUsername().equals(user4.getAlias())||
+                request.getUsername().equals(user5.getAlias())||
+                request.getUsername().equals(user6.getAlias())||
+                request.getUsername().equals(user7.getAlias())||
+                request.getUsername().equals(user8.getAlias())||
+                request.getUsername().equals(user9.getAlias())||
+                request.getUsername().equals(user10.getAlias())||
+                request.getUsername().equals(user11.getAlias())||
+                request.getUsername().equals(user12.getAlias())||
+                request.getUsername().equals(user13.getAlias())||
+                request.getUsername().equals(user14.getAlias())||
+                request.getUsername().equals(user15.getAlias())||
+                request.getUsername().equals(user16.getAlias())||
+                request.getUsername().equals(user17.getAlias())||
+                request.getUsername().equals(user18.getAlias())||
+                request.getUsername().equals(user19.getAlias())||
+                request.getUsername().equals(user20.getAlias())) {
+            return new LoginResponse("Username already taken");
+        }
+        User user = new User(request.getFirstName(), request.getLastName(), request.getUsername(),
+                null);
+        user.setImageBytes(request.getImageBytes());
+        currentUser = user;
         return new LoginResponse(user, new AuthToken());
     }
 
@@ -114,7 +157,7 @@ public class ServerFacade {
             }
         }
 
-        List<User> allFollowees = getDummyFollowees();
+        List<User> allFollowees = getDummyFollowees(request.getFollowerAlias());
         List<User> responseFollowees = new ArrayList<>(request.getLimit());
 
         boolean hasMorePages = false;
@@ -232,7 +275,7 @@ public class ServerFacade {
             }
         }
 
-        List<User> allFollowees = getDummyFollowers();
+        List<User> allFollowees = getDummyFollowers(request.getFollowerAlias());
         List<User> responseFollowees = new ArrayList<>(request.getLimit());
 
         boolean hasMorePages = false;
@@ -286,14 +329,57 @@ public class ServerFacade {
      *
      * @return the followees.
      */
-    List<User> getDummyFollowees() {
-        return Arrays.asList(user1, user2, user3, user4, user5, user6, user7,
-                user8, user9, user10, user11, user12, user13, user14, user15, user16, user17, user18,
-                user19, user20);
+    List<User> getDummyFollowees(String alias) {
+        if (alias.equals(testUser.getAlias())) {
+            return loginFollowees;
+        }
+        else if (alias.equals(currentUser.getAlias())) {
+            return registerFollowees;
+        }
+        else if (currentUser.getAlias().equals(testUser.getAlias())) {
+            List<User> returnList = Collections.emptyList();
+            for (int i = 0; i < loginFollowers.size(); i++) {
+                if (loginFollowers.get(i).getAlias().equals(alias)) {
+                    returnList = Collections.singletonList(testUser);
+                }
+            }
+            return returnList;
+        }
+        else {
+            List<User> returnList = Collections.emptyList();
+            for (int i = 0; i < registerFollowers.size(); i++) {
+                if (registerFollowers.get(i).getAlias().equals(alias)) {
+                    returnList = Collections.singletonList(currentUser);
+                }
+            }
+            return returnList;
+        }
     }
 
-    List<User> getDummyFollowers() {
-        return Arrays.asList(user15, user16, user17, user18,
-                user19, user20);
+    List<User> getDummyFollowers(String alias) {
+        if (alias.equals(testUser.getAlias())) {
+            return loginFollowers;
+        }
+        else if (alias.equals(currentUser.getAlias())) {
+            return registerFollowers;
+        }
+        else if (currentUser.getAlias().equals(testUser.getAlias())) {
+            List<User> returnList = Collections.emptyList();
+            for (int i = 0; i < loginFollowees.size(); i++) {
+                if (loginFollowees.get(i).getAlias().equals(alias)) {
+                    returnList = Collections.singletonList(testUser);
+                }
+            }
+            return returnList;
+        }
+        else {
+            List<User> returnList = Collections.emptyList();
+            for (int i = 0; i < registerFollowees.size(); i++) {
+                if (registerFollowees.get(i).getAlias().equals(alias)) {
+                    returnList = Collections.singletonList(currentUser);
+                }
+            }
+            return returnList;
+        }
     }
 }
