@@ -1,5 +1,7 @@
 package edu.byu.cs.tweeter.model.service;
 
+import android.util.Log;
+
 import java.io.IOException;
 
 import edu.byu.cs.tweeter.model.domain.User;
@@ -14,6 +16,8 @@ import edu.byu.cs.tweeter.util.ByteArrayUtils;
 public class RegisterService {
 
     public LoginResponse register(RegisterRequest request) throws IOException {
+
+
         ServerFacade serverFacade = getServerFacade();
         LoginResponse registerResponse = serverFacade.register(request);
 

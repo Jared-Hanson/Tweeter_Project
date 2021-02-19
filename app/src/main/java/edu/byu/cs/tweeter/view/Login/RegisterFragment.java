@@ -70,6 +70,8 @@ public class RegisterFragment extends Fragment implements RegisterPresenter.View
                 registertoast.show();
 
                 RegisterRequest registerRequest = new RegisterRequest("Samwise", "Gamgee", "theOneRing", "hobbitzrule", imageBytes);
+                RegisterTask registerTask = new RegisterTask(presenter, RegisterFragment.this);
+                registerTask.execute(registerRequest);
             }
         });
 
