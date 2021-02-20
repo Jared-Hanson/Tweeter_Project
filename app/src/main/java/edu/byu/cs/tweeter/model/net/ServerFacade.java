@@ -20,11 +20,13 @@ import edu.byu.cs.tweeter.model.service.request.FollowingRequest;
 import edu.byu.cs.tweeter.model.service.request.LoginRequest;
 import edu.byu.cs.tweeter.model.service.request.RegisterRequest;
 import edu.byu.cs.tweeter.model.service.request.StoryRequest;
+import edu.byu.cs.tweeter.model.service.request.TweetRequest;
 import edu.byu.cs.tweeter.model.service.response.FollowerResponse;
 import edu.byu.cs.tweeter.model.service.response.FollowingResponse;
 import edu.byu.cs.tweeter.model.service.response.LoginResponse;
 
 import edu.byu.cs.tweeter.model.service.response.StoryResponse;
+import edu.byu.cs.tweeter.model.service.response.TweetResponse;
 
 /**
  * Acts as a Facade to the Tweeter server. All network requests to the server should go through
@@ -66,6 +68,7 @@ public class ServerFacade {
     private final List<User> loginFollowers = Arrays.asList(user3, user4, user5, user6, user7, user15,
             user16, user17, user18, user19, user20);
 
+
     private List<User> registerFollowees = Collections.emptyList();
     private final List<User> registerFollowers = Collections.emptyList();
 
@@ -83,6 +86,9 @@ public class ServerFacade {
     private final Tweet tweet4 = new Tweet(user3, "I hate dummy data", date4);
     private final Tweet tweet5 = new Tweet(user5, "Who did that?", date5);
     private final Tweet tweet6 = new Tweet(user17, "Woah bruh", date6);
+
+    private final List<Tweet> tweetsArray = Arrays.asList(tweet1, tweet2, tweet3);
+    private final List<Tweet> feedForTweetsArray = Arrays.asList(tweet1, tweet2, tweet3, tweet4, tweet5, tweet6);
 
 
     /**
@@ -255,10 +261,10 @@ public class ServerFacade {
         return tweetIndex;
     }
     List<Tweet> getDummyTweets() {
-        return Arrays.asList(tweet1, tweet2, tweet3);
+        return tweetsArray;
     }
     List<Tweet> getDummyTweetsFeed() {
-        return Arrays.asList(tweet1, tweet2, tweet3, tweet4, tweet5, tweet6);
+        return feedForTweetsArray;
     }
 
 
@@ -381,5 +387,16 @@ public class ServerFacade {
             }
             return returnList;
         }
+    }
+    TweetResponse postTweet (TweetRequest request){
+        Tweet newTweet = new Tweet(request.getUser(), request.getTweetBody(), request.getDate());
+        feedForTweetsArray.add(newTweet);
+        tweetsArray.add(newTweet);
+
+
+        boolean responseBool = true;
+        TweetResponse response = new TweetResponse(responseBool);
+        return response;
+
     }
 }
