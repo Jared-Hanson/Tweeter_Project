@@ -1,17 +1,35 @@
 package edu.byu.cs.tweeter.presenter;
 
+import android.util.Log;
+
 import java.io.IOException;
 
 import edu.byu.cs.tweeter.model.service.RegisterService;
 import edu.byu.cs.tweeter.model.service.request.RegisterRequest;
 import edu.byu.cs.tweeter.model.service.response.LoginResponse;
+import edu.byu.cs.tweeter.view.Login.RegisterFragment;
+import edu.byu.cs.tweeter.view.Login.RegisterSubject;
 
 /**
  * The presenter for the register functionality of the application.
  */
-public class RegisterPresenter {
+public class RegisterPresenter implements RegisterObserver{
 
     private final View view;
+
+    @Override
+    public void Update(RegisterSubject subject, String first, String last, String username, String password) {
+        if(subject instanceof RegisterFragment) {
+            RegisterFragment registerFragment = (RegisterFragment) subject;
+            if(first.length() > 0 && last.length() > 0 && username.length() > 0 && password.length() >= 6) {
+                Log.d("info", "Update: here");
+                registerFragment.setButton(true);
+            } else {
+                Log.d("info", "Update: here");
+                registerFragment.setButton(false);
+            }
+        }
+    }
 
     /**
      * The interface by which this presenter communicates with it's view.

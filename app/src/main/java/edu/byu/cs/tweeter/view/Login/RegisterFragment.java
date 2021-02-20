@@ -7,11 +7,14 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -27,7 +30,7 @@ import edu.byu.cs.tweeter.presenter.RegisterPresenter;
 import edu.byu.cs.tweeter.view.asyncTasks.RegisterTask;
 import edu.byu.cs.tweeter.view.main.MainActivity;
 
-public class RegisterFragment extends Fragment implements RegisterPresenter.View, RegisterTask.Observer {
+public class RegisterFragment extends RegisterSubject implements RegisterPresenter.View, RegisterTask.Observer {
     private static final String LOG_TAG = "RegisterFragment";
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
     private static final int CAMERA_REQUEST = 1888;
@@ -35,6 +38,11 @@ public class RegisterFragment extends Fragment implements RegisterPresenter.View
     private RegisterPresenter presenter;
     private Toast registertoast;
     private byte[] imageBytes;
+    Button registerButton;
+    EditText firstNameEditText;
+    EditText lastNameEditText;
+    EditText usernameEditText;
+    EditText passwordEditText;
 
     /**
      * Creates an instance of the fragment and places the user and auth token in an arguments
@@ -54,8 +62,84 @@ public class RegisterFragment extends Fragment implements RegisterPresenter.View
 
         presenter = new RegisterPresenter(this);
 
-        Button registerButton = view.findViewById(R.id.RegisterButton);
+        Attach(presenter);
+
+        registerButton = view.findViewById(R.id.RegisterButton);
+        registerButton.setEnabled(false);
         Button pictureButton = view.findViewById(R.id.PictureButton);
+
+        EditText firstNameEditText = view.findViewById(R.id.firstName);
+        EditText lastNameEditText = view.findViewById(R.id.lastName);
+        EditText usernameEditText = view.findViewById(R.id.username);
+        EditText passwordEditText = view.findViewById(R.id.password);
+
+        firstNameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                ;
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                ;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Notify(firstNameEditText.getText().toString(), lastNameEditText.getText().toString(), usernameEditText.getText().toString(), passwordEditText.getText().toString());
+            }
+        });
+
+        lastNameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                ;
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                ;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Notify(firstNameEditText.getText().toString(), lastNameEditText.getText().toString(), usernameEditText.getText().toString(), passwordEditText.getText().toString());
+            }
+        });
+
+        passwordEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                ;
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                ;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Notify(firstNameEditText.getText().toString(), lastNameEditText.getText().toString(), usernameEditText.getText().toString(), passwordEditText.getText().toString());
+            }
+        });
+
+        usernameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                ;
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                ;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Notify(firstNameEditText.getText().toString(), lastNameEditText.getText().toString(), usernameEditText.getText().toString(), passwordEditText.getText().toString());
+            }
+        });
 
         pictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,10 +167,12 @@ public class RegisterFragment extends Fragment implements RegisterPresenter.View
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        Bitmap photo = (Bitmap) data.getExtras().get("data");
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        photo.compress(Bitmap.CompressFormat.JPEG, 80, stream);
-        imageBytes = stream.toByteArray();
+        if(data != null) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            photo.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+            imageBytes = stream.toByteArray();
+        }
     }
 
     @Override
@@ -140,5 +226,9 @@ public class RegisterFragment extends Fragment implements RegisterPresenter.View
     public void handleException(Exception exception) {
         Log.e(LOG_TAG, exception.getMessage(), exception);
         Toast.makeText(getActivity(), "Failed to register because of exception: " + exception.getMessage(), Toast.LENGTH_LONG).show();
+    }
+
+    public void setButton(boolean b) {
+        registerButton.setEnabled(b);
     }
 }

@@ -8,19 +8,15 @@ import java.util.List;
 import edu.byu.cs.tweeter.presenter.LoginObserver;
 
 public abstract class LoginSubject extends Fragment {
-    public List<LoginObserver> observerList = new ArrayList<>();
+    private List<LoginObserver> observerList = new ArrayList<>();
 
     void Attach(LoginObserver observer) {
         observerList.add(observer);
     }
 
-    void Detach(LoginObserver observer) {
-        observerList.remove(observer);
-    }
-
-    void Notify() {
+    void Notify(String username, String password) {
         for(LoginObserver observer : observerList) {
-            observer.Update(this);
+            observer.Update(this, username, password);
         }
     }
 }
