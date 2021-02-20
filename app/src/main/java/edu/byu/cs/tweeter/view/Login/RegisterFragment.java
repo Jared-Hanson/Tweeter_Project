@@ -1,11 +1,9 @@
 package edu.byu.cs.tweeter.view.Login;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,11 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 
 import java.io.ByteArrayOutputStream;
 
@@ -38,11 +34,11 @@ public class RegisterFragment extends RegisterSubject implements RegisterPresent
     private RegisterPresenter presenter;
     private Toast registertoast;
     private byte[] imageBytes;
-    Button registerButton;
-    EditText firstNameEditText;
-    EditText lastNameEditText;
-    EditText usernameEditText;
-    EditText passwordEditText;
+    private Button registerButton;
+    private EditText firstNameEditText;
+    private EditText lastNameEditText;
+    private EditText usernameEditText;
+    private EditText passwordEditText;
 
     /**
      * Creates an instance of the fragment and places the user and auth token in an arguments
@@ -68,10 +64,10 @@ public class RegisterFragment extends RegisterSubject implements RegisterPresent
         registerButton.setEnabled(false);
         Button pictureButton = view.findViewById(R.id.PictureButton);
 
-        EditText firstNameEditText = view.findViewById(R.id.firstName);
-        EditText lastNameEditText = view.findViewById(R.id.lastName);
-        EditText usernameEditText = view.findViewById(R.id.username);
-        EditText passwordEditText = view.findViewById(R.id.password);
+        firstNameEditText = view.findViewById(R.id.firstName);
+        lastNameEditText = view.findViewById(R.id.lastName);
+        usernameEditText = view.findViewById(R.id.username);
+        passwordEditText = view.findViewById(R.id.password);
 
         firstNameEditText.addTextChangedListener(new TextWatcher() {
             @Override

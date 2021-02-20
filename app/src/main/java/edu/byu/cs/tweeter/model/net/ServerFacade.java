@@ -14,6 +14,7 @@ import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.service.request.FollowerRequest;
 import edu.byu.cs.tweeter.model.service.request.FollowingRequest;
 import edu.byu.cs.tweeter.model.service.request.LoginRequest;
+import edu.byu.cs.tweeter.model.service.request.LogoutRequest;
 import edu.byu.cs.tweeter.model.service.request.RegisterRequest;
 import edu.byu.cs.tweeter.model.service.request.StoryRequest;
 import edu.byu.cs.tweeter.model.service.request.TweetRequest;
@@ -21,6 +22,7 @@ import edu.byu.cs.tweeter.model.service.response.FollowerResponse;
 import edu.byu.cs.tweeter.model.service.response.FollowingResponse;
 import edu.byu.cs.tweeter.model.service.response.LoginResponse;
 
+import edu.byu.cs.tweeter.model.service.response.LogoutResponse;
 import edu.byu.cs.tweeter.model.service.response.StoryResponse;
 import edu.byu.cs.tweeter.model.service.response.TweetResponse;
 
@@ -134,6 +136,15 @@ public class ServerFacade {
         user.setImageBytes(request.getImageBytes());
         currentUser = user;
         return new LoginResponse(user, new AuthToken());
+    }
+
+    public LogoutResponse logout(LogoutRequest logoutRequest) {
+        LogoutResponse logoutResponse = null;
+        if(logoutRequest.getUser() != null && logoutRequest.getAuthToken() != null) {
+            logoutResponse = new LogoutResponse(true, logoutRequest.getUser() + " succesfully logged out");
+        }
+
+        return logoutResponse;
     }
 
     /**
