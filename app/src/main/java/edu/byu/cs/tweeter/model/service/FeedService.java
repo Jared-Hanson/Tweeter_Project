@@ -33,4 +33,5 @@ public class FeedService {
     ServerFacade getServerFacade() {
         return new ServerFacade();
     }
+    //public void addObserver
 }

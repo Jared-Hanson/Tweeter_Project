@@ -12,9 +12,15 @@ public class FeedPresenter {
 
     public interface View{
         // this is where we need to add functions to update the view if there are more tweets added or more followers added.
+
+        //void updateFeed();
     }
 
-    public FeedPresenter(FeedPresenter.View view) {this.view = view;}
+    public FeedPresenter(FeedPresenter.View view) {
+        this.view = view;
+        //FeedService feed = getFeedService();
+        //feed.addObserver(this);
+    }
 
     public StoryResponse getFeed(StoryRequest request) throws IOException {
         FeedService feedService = getFeedService();

@@ -1,15 +1,11 @@
 package edu.byu.cs.tweeter.model.net;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Observer;
 
 import edu.byu.cs.tweeter.BuildConfig;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
@@ -87,8 +83,8 @@ public class ServerFacade {
     private final Tweet tweet5 = new Tweet(user5, "Who did that?", date5);
     private final Tweet tweet6 = new Tweet(user17, "Woah bruh", date6);
 
-    private final List<Tweet> tweetsArray = Arrays.asList(tweet1, tweet2, tweet3);
-    private final List<Tweet> feedForTweetsArray = Arrays.asList(tweet1, tweet2, tweet3, tweet4, tweet5, tweet6);
+    private final List<Tweet> tweetsArray = new ArrayList<Tweet>(Arrays.asList(tweet1, tweet2, tweet3));
+    private final List<Tweet> feedForTweetsArray = new ArrayList<Tweet>(Arrays.asList(tweet1, tweet2, tweet3, tweet4, tweet5, tweet6));
 
 
     /**
@@ -388,10 +384,13 @@ public class ServerFacade {
             return returnList;
         }
     }
-    TweetResponse postTweet (TweetRequest request){
+    public TweetResponse postTweet(TweetRequest request){
+        // need to fix this so that it acctually uses the current user
         Tweet newTweet = new Tweet(request.getUser(), request.getTweetBody(), request.getDate());
-        feedForTweetsArray.add(newTweet);
+        System.out.println(newTweet.toString());
+        System.out.println(tweetsArray.size());
         tweetsArray.add(newTweet);
+        System.out.println(tweetsArray.size());
 
 
         boolean responseBool = true;
@@ -399,4 +398,6 @@ public class ServerFacade {
         return response;
 
     }
+
+
 }

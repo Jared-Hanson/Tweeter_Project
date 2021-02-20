@@ -1,23 +1,33 @@
 package edu.byu.cs.tweeter.view.main;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.IOException;
+import java.util.Date;
 
 import edu.byu.cs.tweeter.R;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.User;
+import edu.byu.cs.tweeter.model.service.TweetService;
+import edu.byu.cs.tweeter.model.service.request.TweetRequest;
+import edu.byu.cs.tweeter.presenter.TweetPresenter;
 import edu.byu.cs.tweeter.view.util.ImageUtils;
 
 /**
@@ -53,8 +63,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                createTweetPopUp();
             }
         });
 
@@ -72,6 +81,42 @@ public class MainActivity extends AppCompatActivity {
 
         TextView followerCount = findViewById(R.id.followerCount);
         followerCount.setText(getString(R.string.followerCount, 27));
+    }
+    public void createTweetPopUp(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Compose your Tweet");
+
+// Set up the input
+        final EditText input = new EditText(this);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+// Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String inText = input.getText().toString();
+                User user = (User) getIntent().getSerializableExtra(CURRENT_USER_KEY);
+                TweetRequest request = new TweetRequest(user, inText, new Date());
+
+                TweetService service = new TweetService();
+                try {
+                    service.postTweet(request);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 
     @Override
