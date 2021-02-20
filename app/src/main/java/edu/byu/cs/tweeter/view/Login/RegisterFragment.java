@@ -18,6 +18,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import java.io.ByteArrayOutputStream;
+
 import edu.byu.cs.tweeter.R;
 import edu.byu.cs.tweeter.model.service.request.RegisterRequest;
 import edu.byu.cs.tweeter.model.service.response.LoginResponse;
@@ -81,8 +83,10 @@ public class RegisterFragment extends Fragment implements RegisterPresenter.View
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            imageBytes = photo.getNinePatchChunk();
+        Bitmap photo = (Bitmap) data.getExtras().get("data");
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        photo.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+        imageBytes = stream.toByteArray();
     }
 
     @Override

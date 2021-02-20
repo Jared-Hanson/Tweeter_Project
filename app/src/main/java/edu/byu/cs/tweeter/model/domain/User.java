@@ -16,6 +16,7 @@ public class User implements Comparable<User>, Serializable {
 
     public User(String firstName, String lastName, String imageURL) {
         this(firstName, lastName, String.format("@%s%s", firstName, lastName), imageURL);
+        imageBytes = null;
     }
 
     public User(String firstName, String lastName, String alias, String imageURL) {
@@ -23,6 +24,7 @@ public class User implements Comparable<User>, Serializable {
         this.lastName = lastName;
         this.alias = alias;
         this.imageUrl = imageURL;
+        imageBytes = null;
     }
 
     public String getFirstName() {

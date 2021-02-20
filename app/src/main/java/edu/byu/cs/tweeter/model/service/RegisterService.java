@@ -21,10 +21,10 @@ public class RegisterService {
         ServerFacade serverFacade = getServerFacade();
         LoginResponse registerResponse = serverFacade.register(request);
 
-        if(registerResponse.isSuccess() && registerResponse.getUser().getImageBytes().length == 0) {
+        if(registerResponse.isSuccess() && registerResponse.getUser().getImageBytes() == null) {
             loadImage(registerResponse.getUser());
         }
-        
+
         return registerResponse;
     }
 
