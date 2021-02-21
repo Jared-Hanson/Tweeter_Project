@@ -56,11 +56,28 @@ public class LoginTask extends AsyncTask<LoginRequest, Void, LoginResponse> {
         try {
             loginResponse = presenter.login(loginRequests[0]);
 
+            if(loginResponse.isSuccess()) {
+                loadImage(loginResponse.getUser());
+            }
         } catch (IOException ex) {
             exception = ex;
         }
 
         return loginResponse;
+    }
+
+    /**
+     * Loads the profile image for the user.
+     *
+     * @param user the user whose profile image is to be loaded.
+     */
+    private void loadImage(User user) {
+        try {
+            byte [] bytes = ByteArrayUtils.bytesFromUrl(user.getImageUrl());
+            user.setImageBytes(bytes);
+        } catch (IOException e) {
+            Log.e(this.getClass().getName(), e.toString(), e);
+        }
     }
 
     /**

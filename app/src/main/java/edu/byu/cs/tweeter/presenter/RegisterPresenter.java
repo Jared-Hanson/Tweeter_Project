@@ -22,10 +22,8 @@ public class RegisterPresenter implements RegisterObserver{
         if(subject instanceof RegisterFragment) {
             RegisterFragment registerFragment = (RegisterFragment) subject;
             if(first.length() > 0 && last.length() > 0 && username.length() > 0 && password.length() >= 6) {
-                Log.d("info", "Update: here");
                 registerFragment.setButton(true);
             } else {
-                Log.d("info", "Update: here");
                 registerFragment.setButton(false);
             }
         }

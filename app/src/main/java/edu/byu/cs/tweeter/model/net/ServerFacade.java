@@ -112,6 +112,7 @@ public class ServerFacade {
         Log.d("info", "login: " + request.getUsername());
         Log.d("info", "login: " + request.getPassword());
         if (request.getUsername().equals("dummyUserName") && request.getPassword().equals("dummyPassword")) {
+            Log.d("info", "logged in?");
             return new LoginResponse(testUser, new AuthToken());
         }
         else {

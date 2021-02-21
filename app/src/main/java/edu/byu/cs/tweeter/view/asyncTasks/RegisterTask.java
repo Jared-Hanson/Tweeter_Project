@@ -55,6 +55,9 @@ public class RegisterTask extends AsyncTask<RegisterRequest, Void, LoginResponse
         try {
             loginResponse = presenter.register(registerRequests[0]);
 
+            if(loginResponse.isSuccess()) {
+                loadImage(loginResponse.getUser());
+            }
         } catch (IOException ex) {
             exception = ex;
         }
@@ -62,6 +65,19 @@ public class RegisterTask extends AsyncTask<RegisterRequest, Void, LoginResponse
         return loginResponse;
     }
 
+    /**
+     * Loads the profile image for the user.
+     *
+     * @param user the user whose profile image is to be loaded.
+     */
+    private void loadImage(User user) {
+        try {
+            byte [] bytes = ByteArrayUtils.bytesFromUrl(user.getImageUrl());
+            user.setImageBytes(bytes);
+        } catch (IOException e) {
+            Log.e(this.getClass().getName(), e.toString(), e);
+        }
+    }
 
     /**
      * Notifies the observer (on the thread of the invoker of the
