@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Observer;
 
 import edu.byu.cs.tweeter.BuildConfig;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
@@ -35,8 +34,7 @@ public class ServerFacade {
     private static final String MALE_IMAGE_URL = "https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/donald_duck.png";
     private static final String FEMALE_IMAGE_URL = "https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/daisy_duck.png";
 
-    private final User testUser = new User("Test", "User", MALE_IMAGE_URL);
-    private User currentUser = null;
+    private final User testUser = new User("Test", "User", "@dummyUserName", MALE_IMAGE_URL);
 
     private final User user1 = new User("Allen", "Anderson", MALE_IMAGE_URL);
     private final User user2 = new User("Amy", "Ames", FEMALE_IMAGE_URL);
@@ -59,7 +57,7 @@ public class ServerFacade {
     private final User user19 = new User("Justin", "Jones", MALE_IMAGE_URL);
     private final User user20 = new User("Jill", "Johnson", FEMALE_IMAGE_URL);
 
-    private List<User> loginFollowees = Arrays.asList(user1, user2, user3, user4, user5, user6, user7,
+    private final List<User> loginFollowees = Arrays.asList(user1, user2, user3, user4, user5, user6, user7,
             user8, user9, user10, user11, user12, user13, user14, user15, user16, user17, user18,
             user19, user20);
 
@@ -67,7 +65,7 @@ public class ServerFacade {
             user16, user17, user18, user19, user20);
 
 
-    private List<User> registerFollowees = Collections.emptyList();
+    private final List<User> registerFollowees = Collections.emptyList();
     private final List<User> registerFollowers = Collections.emptyList();
 
     private final Date date1 = new Date(2010, 12, 6);
@@ -76,17 +74,28 @@ public class ServerFacade {
     private final Date date4 = new Date(2010, 12, 1);
     private final Date date5 = new Date(2021, 8, 2);
     private final Date date6 = new Date(2020, 6, 6);
+    private final Date date7 = new Date(2020, 4, 6);
+    private final Date date8 = new Date(2010, 12, 2);
+    private final Date date9 = new Date(2019, 8, 2);
+    private final Date date10 = new Date(2011, 6, 6);
+    private final Date date11 = new Date(2015, 4, 6);
 
-    private final Tweet tweet1 = new Tweet(testUser, "what a tweet eh", date1);
-    private final Tweet tweet2 = new Tweet(testUser, "Second Tweet", date2);
-    private final Tweet tweet3 = new Tweet(testUser, "What a tweet tweet", date3);
+    private final Tweet uTweet1 = new Tweet(testUser, "what a tweet eh", date1);
+    private final Tweet uTweet2 = new Tweet(testUser, "Second Tweet", date2);
+    private final Tweet uTweet3 = new Tweet(testUser, "What a tweet tweet", date3);
 
-    private final Tweet tweet4 = new Tweet(user3, "I hate dummy data", date4);
-    private final Tweet tweet5 = new Tweet(user5, "Who did that?", date5);
-    private final Tweet tweet6 = new Tweet(user17, "Woah bruh", date6);
+    private final Tweet fTweet1 = new Tweet(user3, "I hate dummy data", date4);
+    private final Tweet fTweet2 = new Tweet(user5, "Who did that?", date5);
+    private final Tweet fTweet3 = new Tweet(user17, "Woah bruh", date6);
+    private final Tweet fTweet4 = new Tweet(user1, "Go to https://www.byu.edu/", date7);
+    private final Tweet fTweet5 = new Tweet(user8, "Visit my page at " + user8.getAlias(), date8);
 
-    private final List<Tweet> tweetsArray = new ArrayList<Tweet>(Arrays.asList(tweet1, tweet2, tweet3));
-    private final List<Tweet> feedForTweetsArray = new ArrayList<Tweet>(Arrays.asList(tweet1, tweet2, tweet3, tweet4, tweet5, tweet6));
+    private final List<Tweet> loginFeed = new ArrayList<Tweet>(Arrays.asList(fTweet2, fTweet3, fTweet4,
+            fTweet5, fTweet1));
+    private List<Tweet> loginStory = new ArrayList<Tweet>(Arrays.asList(uTweet2, uTweet3, uTweet1));
+
+    private final List<Tweet> registerFeed = Collections.emptyList();
+    private List<Tweet> registerStory = Collections.emptyList();
 
 
     /**
@@ -99,7 +108,6 @@ public class ServerFacade {
      */
     public LoginResponse login(LoginRequest request) {
         if (request.getUsername().equals("dummyUserName") && request.getPassword().equals("dummyPassword")) {
-            currentUser = testUser;
             return new LoginResponse(testUser, new AuthToken());
         }
         else {
@@ -134,7 +142,6 @@ public class ServerFacade {
         User user = new User(request.getFirstName(), request.getLastName(), request.getUsername(),
                 null);
         user.setImageBytes(request.getImageBytes());
-        currentUser = user;
         return new LoginResponse(user, new AuthToken());
     }
 
@@ -200,7 +207,7 @@ public class ServerFacade {
             }
         }
 
-        List<Tweet> allTweets = getDummyTweets();
+        List<Tweet> allTweets = getDummyTweetsStory(request.getUserAlias());
         List<Tweet> responseTweets = new ArrayList<>(request.getLimit());
 
         boolean hasMorePages = false;
@@ -230,7 +237,7 @@ public class ServerFacade {
             }
         }
 
-        List<Tweet> allTweets = getDummyTweetsFeed();
+        List<Tweet> allTweets = getDummyTweetsFeed(request.getUserAlias());
         List<Tweet> responseTweets = new ArrayList<>(request.getLimit());
 
         boolean hasMorePages = false;
@@ -267,11 +274,71 @@ public class ServerFacade {
 
         return tweetIndex;
     }
-    List<Tweet> getDummyTweets() {
-        return tweetsArray;
+    List<Tweet> getDummyTweetsStory(String alias) {
+        if (alias.equals(testUser.getAlias())) {
+            return loginStory;
+        }
+        else if (alias.equals(user1.getAlias())||
+                alias.equals(user2.getAlias())||
+                alias.equals(user3.getAlias())||
+                alias.equals(user4.getAlias())||
+                alias.equals(user5.getAlias())||
+                alias.equals(user6.getAlias())||
+                alias.equals(user7.getAlias())||
+                alias.equals(user8.getAlias())||
+                alias.equals(user9.getAlias())||
+                alias.equals(user10.getAlias())||
+                alias.equals(user11.getAlias())||
+                alias.equals(user12.getAlias())||
+                alias.equals(user13.getAlias())||
+                alias.equals(user14.getAlias())||
+                alias.equals(user15.getAlias())||
+                alias.equals(user16.getAlias())||
+                alias.equals(user17.getAlias())||
+                alias.equals(user18.getAlias())||
+                alias.equals(user19.getAlias())||
+                alias.equals(user20.getAlias())) {
+            List<Tweet> returnList = Collections.emptyList();
+            for (int i = 0; i < loginFeed.size(); i++) {
+                if (loginFeed.get(i).getAuthor().equals(alias)) {
+                    returnList.add(loginFeed.get(i));
+                }
+            }
+            return returnList;
+        }
+        else {
+            return registerStory;
+        }
     }
-    List<Tweet> getDummyTweetsFeed() {
-        return feedForTweetsArray;
+    List<Tweet> getDummyTweetsFeed(String alias) {
+        if (alias.equals(testUser.getAlias())) {
+            return loginFeed;
+        }
+        else if (alias.equals(user1.getAlias())||
+                alias.equals(user2.getAlias())||
+                alias.equals(user3.getAlias())||
+                alias.equals(user4.getAlias())||
+                alias.equals(user5.getAlias())||
+                alias.equals(user6.getAlias())||
+                alias.equals(user7.getAlias())||
+                alias.equals(user8.getAlias())||
+                alias.equals(user9.getAlias())||
+                alias.equals(user10.getAlias())||
+                alias.equals(user11.getAlias())||
+                alias.equals(user12.getAlias())||
+                alias.equals(user13.getAlias())||
+                alias.equals(user14.getAlias())||
+                alias.equals(user15.getAlias())||
+                alias.equals(user16.getAlias())||
+                alias.equals(user17.getAlias())||
+                alias.equals(user18.getAlias())||
+                alias.equals(user19.getAlias())||
+                alias.equals(user20.getAlias())) {
+            return loginStory;
+        }
+        else {
+            return registerFeed;
+        }
     }
 
 
@@ -346,10 +413,26 @@ public class ServerFacade {
         if (alias.equals(testUser.getAlias())) {
             return loginFollowees;
         }
-        else if (alias.equals(currentUser.getAlias())) {
-            return registerFollowees;
-        }
-        else if (currentUser.getAlias().equals(testUser.getAlias())) {
+        else if (alias.equals(user1.getAlias())||
+                alias.equals(user2.getAlias())||
+                alias.equals(user3.getAlias())||
+                alias.equals(user4.getAlias())||
+                alias.equals(user5.getAlias())||
+                alias.equals(user6.getAlias())||
+                alias.equals(user7.getAlias())||
+                alias.equals(user8.getAlias())||
+                alias.equals(user9.getAlias())||
+                alias.equals(user10.getAlias())||
+                alias.equals(user11.getAlias())||
+                alias.equals(user12.getAlias())||
+                alias.equals(user13.getAlias())||
+                alias.equals(user14.getAlias())||
+                alias.equals(user15.getAlias())||
+                alias.equals(user16.getAlias())||
+                alias.equals(user17.getAlias())||
+                alias.equals(user18.getAlias())||
+                alias.equals(user19.getAlias())||
+                alias.equals(user20.getAlias())) {
             List<User> returnList = Collections.emptyList();
             for (int i = 0; i < loginFollowers.size(); i++) {
                 if (loginFollowers.get(i).getAlias().equals(alias)) {
@@ -359,13 +442,7 @@ public class ServerFacade {
             return returnList;
         }
         else {
-            List<User> returnList = Collections.emptyList();
-            for (int i = 0; i < registerFollowers.size(); i++) {
-                if (registerFollowers.get(i).getAlias().equals(alias)) {
-                    returnList = Collections.singletonList(currentUser);
-                }
-            }
-            return returnList;
+            return registerFollowees;
         }
     }
 
@@ -373,10 +450,26 @@ public class ServerFacade {
         if (alias.equals(testUser.getAlias())) {
             return loginFollowers;
         }
-        else if (alias.equals(currentUser.getAlias())) {
-            return registerFollowers;
-        }
-        else if (currentUser.getAlias().equals(testUser.getAlias())) {
+        else if (alias.equals(user1.getAlias())||
+                alias.equals(user2.getAlias())||
+                alias.equals(user3.getAlias())||
+                alias.equals(user4.getAlias())||
+                alias.equals(user5.getAlias())||
+                alias.equals(user6.getAlias())||
+                alias.equals(user7.getAlias())||
+                alias.equals(user8.getAlias())||
+                alias.equals(user9.getAlias())||
+                alias.equals(user10.getAlias())||
+                alias.equals(user11.getAlias())||
+                alias.equals(user12.getAlias())||
+                alias.equals(user13.getAlias())||
+                alias.equals(user14.getAlias())||
+                alias.equals(user15.getAlias())||
+                alias.equals(user16.getAlias())||
+                alias.equals(user17.getAlias())||
+                alias.equals(user18.getAlias())||
+                alias.equals(user19.getAlias())||
+                alias.equals(user20.getAlias())) {
             List<User> returnList = Collections.emptyList();
             for (int i = 0; i < loginFollowees.size(); i++) {
                 if (loginFollowees.get(i).getAlias().equals(alias)) {
@@ -386,22 +479,24 @@ public class ServerFacade {
             return returnList;
         }
         else {
-            List<User> returnList = Collections.emptyList();
-            for (int i = 0; i < registerFollowees.size(); i++) {
-                if (registerFollowees.get(i).getAlias().equals(alias)) {
-                    returnList = Collections.singletonList(currentUser);
-                }
-            }
-            return returnList;
+            return registerFollowers;
         }
     }
     public TweetResponse postTweet(TweetRequest request){
         // need to fix this so that it acctually uses the current user
         Tweet newTweet = new Tweet(request.getUser(), request.getTweetBody(), request.getDate());
         System.out.println(newTweet.toString());
-        System.out.println(tweetsArray.size());
-        tweetsArray.add(newTweet);
-        System.out.println(tweetsArray.size());
+        if (request.getUser().getAlias().equals(testUser.getAlias())) {
+            System.out.println(loginStory.size());
+            loginStory.add(newTweet);
+            System.out.println(loginStory.size());
+        }
+        else {
+            System.out.println(registerStory.size());
+            registerStory.add(newTweet);
+            System.out.println(registerStory.size());
+        }
+
 
 
         boolean responseBool = true;
