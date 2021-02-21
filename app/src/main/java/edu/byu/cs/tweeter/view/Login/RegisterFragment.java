@@ -151,7 +151,7 @@ public class RegisterFragment extends RegisterSubject implements RegisterPresent
                 registertoast = Toast.makeText(getActivity(), "registering", Toast.LENGTH_LONG);
                 registertoast.show();
 
-                RegisterRequest registerRequest = new RegisterRequest("Samwise", "Gamgee", "theOneRing", "hobbitzrule", imageBytes);
+                RegisterRequest registerRequest = new RegisterRequest(firstNameEditText.getText().toString(), lastNameEditText.getText().toString(), usernameEditText.getText().toString(), passwordEditText.getText().toString(), imageBytes);
                 RegisterTask registerTask = new RegisterTask(presenter, RegisterFragment.this);
                 registerTask.execute(registerRequest);
             }

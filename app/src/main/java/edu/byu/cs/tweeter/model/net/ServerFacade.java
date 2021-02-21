@@ -1,5 +1,7 @@
 package edu.byu.cs.tweeter.model.net;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -107,6 +109,8 @@ public class ServerFacade {
      * @return the login response.
      */
     public LoginResponse login(LoginRequest request) {
+        Log.d("info", "login: " + request.getUsername());
+        Log.d("info", "login: " + request.getPassword());
         if (request.getUsername().equals("dummyUserName") && request.getPassword().equals("dummyPassword")) {
             return new LoginResponse(testUser, new AuthToken());
         }

@@ -17,22 +17,8 @@ public class LoginService {
         ServerFacade serverFacade = getServerFacade();
         LoginResponse loginResponse = serverFacade.login(request);
 
-        if(loginResponse.isSuccess()) {
-            loadImage(loginResponse.getUser());
-        }
-
         return loginResponse;
     }
-
-    /**
-     * Loads the profile image data for the user.
-     *
-     * @param user the user whose profile image data is to be loaded.
-     */
-    private void loadImage(User user) throws IOException {
-        byte [] bytes = ByteArrayUtils.bytesFromUrl(user.getImageUrl());
-        user.setImageBytes(bytes);
-    } 
 
     /**
      * Returns an instance of {@link ServerFacade}. Allows mocking of the ServerFacade class for

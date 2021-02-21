@@ -27,6 +27,8 @@ public class LoginFragment extends LoginSubject implements LoginPresenter.View, 
     private LoginPresenter presenter;
     private Toast loginInToast;
     private Button loginButton;
+    private EditText usernameEditText;
+    private EditText passwordEditText;
 
     /**
      * Creates an instance of the fragment and places the user and auth token in an arguments
@@ -46,6 +48,9 @@ public class LoginFragment extends LoginSubject implements LoginPresenter.View, 
 
         presenter = new LoginPresenter(this);
 
+        usernameEditText = view.findViewById(R.id.username);
+        passwordEditText = view.findViewById(R.id.password);
+
         Attach(presenter);
 
         loginButton = view.findViewById(R.id.LoginButton);
@@ -56,15 +61,11 @@ public class LoginFragment extends LoginSubject implements LoginPresenter.View, 
                 loginInToast = Toast.makeText(getActivity(), "logging in", Toast.LENGTH_LONG);
                 loginInToast.show();
 
-                LoginRequest loginRequest = new LoginRequest("dummyUserName", "dummyPassword");
+                LoginRequest loginRequest = new LoginRequest(usernameEditText.getText().toString(), passwordEditText.getText().toString());
                 LoginTask loginTask = new LoginTask(presenter, LoginFragment.this);
                 loginTask.execute(loginRequest);
             }
         });
-
-        EditText usernameEditText = view.findViewById(R.id.username);
-        EditText passwordEditText = view.findViewById(R.id.password);
-
 
         usernameEditText.addTextChangedListener(new TextWatcher() {
             @Override
