@@ -29,6 +29,10 @@
             android:name=".view.main.MainActivity"
             android:label="@string/title_activity_main">
         </activity>
+        <activity
+            android:name=".view.main.UserActivity"
+            android:label="@string/user_activity_main">
+        </activity>
     </application>
 
 </manifest>

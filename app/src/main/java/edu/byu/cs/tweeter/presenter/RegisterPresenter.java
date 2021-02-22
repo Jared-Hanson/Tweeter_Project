@@ -1,19 +1,18 @@
 package edu.byu.cs.tweeter.presenter;
 
-import android.util.Log;
-
 import java.io.IOException;
 
 import edu.byu.cs.tweeter.model.service.RegisterService;
 import edu.byu.cs.tweeter.model.service.request.RegisterRequest;
 import edu.byu.cs.tweeter.model.service.response.LoginResponse;
+import edu.byu.cs.tweeter.presenter.Observers.RegisterObserver;
 import edu.byu.cs.tweeter.view.Login.RegisterFragment;
 import edu.byu.cs.tweeter.view.Login.RegisterSubject;
 
 /**
  * The presenter for the register functionality of the application.
  */
-public class RegisterPresenter implements RegisterObserver{
+public class RegisterPresenter implements RegisterObserver {
 
     private final View view;
 

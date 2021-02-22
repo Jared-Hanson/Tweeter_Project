@@ -1,5 +1,6 @@
 package edu.byu.cs.tweeter.view.main;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,14 +33,22 @@ import edu.byu.cs.tweeter.R;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.service.TweetService;
+import edu.byu.cs.tweeter.model.service.request.FollowDataRequest;
+import edu.byu.cs.tweeter.model.service.request.FollowerRequest;
 import edu.byu.cs.tweeter.model.service.request.LogoutRequest;
 import edu.byu.cs.tweeter.model.service.request.TweetRequest;
+import edu.byu.cs.tweeter.model.service.response.FollowDataResponse;
+import edu.byu.cs.tweeter.model.service.response.FollowerResponse;
 import edu.byu.cs.tweeter.model.service.response.LogoutResponse;
 import edu.byu.cs.tweeter.model.service.response.TweetResponse;
+import edu.byu.cs.tweeter.presenter.FollowerDataPresenter;
 import edu.byu.cs.tweeter.presenter.LogoutPresenter;
 import edu.byu.cs.tweeter.presenter.TweetPresenter;
 import edu.byu.cs.tweeter.view.Login.LoginActivity;
+import edu.byu.cs.tweeter.view.asyncTasks.GetFollowerDataTask;
+import edu.byu.cs.tweeter.view.asyncTasks.GetFollowerTask;
 import edu.byu.cs.tweeter.view.asyncTasks.LogoutTask;
+import edu.byu.cs.tweeter.view.asyncTasks.PostTweetTask;
 import edu.byu.cs.tweeter.view.util.ImageUtils;
 
 import static edu.byu.cs.tweeter.R.layout.activity_main;
@@ -57,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements LogoutTask.Observ
     private Toast tweetToast;
     private User user;
     private AuthToken authToken;
+    private FollowerDataPresenter dataPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements LogoutTask.Observ
         }
 
         authToken = (AuthToken) getIntent().getSerializableExtra(AUTH_TOKEN_KEY);
+        dataPresenter = new FollowerDataPresenter();
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), user, authToken);
         ViewPager viewPager = findViewById(R.id.view_pager);
@@ -83,8 +94,10 @@ public class MainActivity extends AppCompatActivity implements LogoutTask.Observ
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createTweetPopUp();
+                //createTweetPopUp();
 
+                // I just need a button to test with.
+                createUserFeedTest();
 
 
             }
@@ -104,48 +117,20 @@ public class MainActivity extends AppCompatActivity implements LogoutTask.Observ
 
         TextView followerCount = findViewById(R.id.followerCount);
         followerCount.setText(getString(R.string.followerCount, 27));
+        new getFollowerData().GetDataFunction(new FollowDataRequest(user));
     }
-    public void createTweetPopUp(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Compose your Tweet");
+    public void createUserFeedTest(){
+        Intent intent = new Intent(this, UserActivity.class);
 
-// Set up the input
-        final EditText input = new EditText(this);
-// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
-        tweetToast = Toast.makeText(this, "Tweet Succesfully added to facade", Toast.LENGTH_LONG);
+        intent.putExtra(UserActivity.CURRENT_USER_KEY, user);
+        intent.putExtra(UserActivity.AUTH_TOKEN_KEY, authToken);
+        intent.putExtra(UserActivity.LOGGED_IN_USER, user);
 
-// Set up the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                TweetResponse res = new TweetResponse(false);
-                String inText = input.getText().toString();
-                User user = (User) getIntent().getSerializableExtra(CURRENT_USER_KEY);
-                TweetRequest request = new TweetRequest(user, inText, new Date());
 
-                TweetPresenter presenter = new TweetPresenter();
-                try {
-                     res = presenter.postTweet(request);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                if(res.isSuccess()){
-                    tweetToast.show();
-                }
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
+        startActivity(intent);
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -186,4 +171,97 @@ public class MainActivity extends AppCompatActivity implements LogoutTask.Observ
         Log.e(LOG_TAG, ex.getMessage(), ex);
         Toast.makeText(this, "Failed to login because of exception: " + ex.getMessage(), Toast.LENGTH_LONG).show();
     }
+
+    public void createTweetPopUp() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Compose your Tweet");
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+
+        // Set up the buttons
+
+
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                String inText = input.getText().toString();
+                User user = (User) getIntent().getSerializableExtra(CURRENT_USER_KEY);
+                TweetRequest request = new TweetRequest(user, inText, new Date());
+                new postTweetDialogBOX().postTweet(request);
+
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+
+private class postTweetDialogBOX implements PostTweetTask.Observer {
+
+    void postTweet(TweetRequest request) {
+        TweetPresenter presenter = new TweetPresenter();
+        PostTweetTask tweet = new PostTweetTask(presenter, this);
+        tweet.execute(request);
+    }
+
+
+    @Override
+    public void postTweetResponse(TweetResponse tweetResponse) {
+        tweetToast = Toast.makeText(getApplicationContext(), "Tweet Succesfully added to facade", Toast.LENGTH_LONG);
+        if (tweetResponse.isSuccess()) {
+            tweetToast.show();
+        }
+
+    }
+
+    @Override
+    public void handleException(Exception exception) {
+        Log.e(LOG_TAG, exception.getMessage(), exception);
+        Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+
+    }
+}
+
+    private class getFollowerData implements GetFollowerDataTask.Observer {
+
+        void GetDataFunction(FollowDataRequest request) {
+            //FollowerDataPresenter presenter = new FollowerDataPresenter(dataPresenter);
+            GetFollowerDataTask data = new GetFollowerDataTask(dataPresenter, this);
+            data.execute(request);
+        }
+
+
+        @Override
+        public void getData(FollowDataResponse res) {
+            TextView followeeCount = findViewById(R.id.followeeCount);
+            followeeCount.setText(getString(R.string.followeeCount, res.getFollowing()));
+
+            TextView followerCount = findViewById(R.id.followerCount);
+            followerCount.setText(getString(R.string.followerCount, res.getFollowers()));
+
+        }
+
+        @Override
+        public void handleException(Exception exception) {
+            Log.e(LOG_TAG, exception.getMessage(), exception);
+            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+
+        }
+    }
+
+
+
 }

@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.byu.cs.tweeter.presenter.RegisterObserver;
+import edu.byu.cs.tweeter.presenter.Observers.RegisterObserver;
 
 public class RegisterSubject extends Fragment {
     private List<RegisterObserver> observerList = new ArrayList<>();

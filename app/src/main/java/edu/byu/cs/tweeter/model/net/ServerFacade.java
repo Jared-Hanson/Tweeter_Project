@@ -12,6 +12,8 @@ import edu.byu.cs.tweeter.BuildConfig;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.Tweet;
 import edu.byu.cs.tweeter.model.domain.User;
+import edu.byu.cs.tweeter.model.service.request.FollowActionRequest;
+import edu.byu.cs.tweeter.model.service.request.FollowDataRequest;
 import edu.byu.cs.tweeter.model.service.request.FollowerRequest;
 import edu.byu.cs.tweeter.model.service.request.FollowingRequest;
 import edu.byu.cs.tweeter.model.service.request.LoginRequest;
@@ -19,6 +21,9 @@ import edu.byu.cs.tweeter.model.service.request.LogoutRequest;
 import edu.byu.cs.tweeter.model.service.request.RegisterRequest;
 import edu.byu.cs.tweeter.model.service.request.StoryRequest;
 import edu.byu.cs.tweeter.model.service.request.TweetRequest;
+import edu.byu.cs.tweeter.model.service.request.UnFollowActionRequest;
+import edu.byu.cs.tweeter.model.service.response.FollowActionResponse;
+import edu.byu.cs.tweeter.model.service.response.FollowDataResponse;
 import edu.byu.cs.tweeter.model.service.response.FollowerResponse;
 import edu.byu.cs.tweeter.model.service.response.FollowingResponse;
 import edu.byu.cs.tweeter.model.service.response.LoginResponse;
@@ -36,7 +41,7 @@ public class ServerFacade {
     private static final String MALE_IMAGE_URL = "https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/donald_duck.png";
     private static final String FEMALE_IMAGE_URL = "https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/daisy_duck.png";
 
-    private final User testUser = new User("Test", "User", "@dummyUserName", MALE_IMAGE_URL);
+    //private final User testUser = new User("Test", "User", "@dummyUserName", MALE_IMAGE_URL);
 
     private final User user1 = new User("Allen", "Anderson", MALE_IMAGE_URL);
     private final User user2 = new User("Amy", "Ames", FEMALE_IMAGE_URL);
@@ -65,7 +70,7 @@ public class ServerFacade {
 
     private final List<User> loginFollowers = Arrays.asList(user3, user4, user5, user6, user7, user15,
             user16, user17, user18, user19, user20);
-
+    private final User testUser = new User("Test", "User", "@dummyUserName", MALE_IMAGE_URL, loginFollowers.size(), loginFollowees.size());
 
     private final List<User> registerFollowees = Collections.emptyList();
     private final List<User> registerFollowers = Collections.emptyList();
@@ -109,15 +114,23 @@ public class ServerFacade {
      * @return the login response.
      */
     public LoginResponse login(LoginRequest request) {
+
+
         Log.d("info", "login: " + request.getUsername());
         Log.d("info", "login: " + request.getPassword());
         if (request.getUsername().equals("dummyUserName") && request.getPassword().equals("dummyPassword")) {
             Log.d("info", "logged in?");
             return new LoginResponse(testUser, new AuthToken());
         }
+        // this is here becuase i got tired of typing that long user name in each time
+        else if (request.getUsername().equals("d") && request.getPassword().equals("dddddddd")) {
+            Log.d("info", "logged in?");
+            return new LoginResponse(testUser, new AuthToken());
+        }
         else {
             return new LoginResponse("Invalid credentials");
         }
+
     }
 
     public LoginResponse register(RegisterRequest request) {
@@ -497,6 +510,19 @@ public class ServerFacade {
         return response;
 
     }
+    public FollowDataResponse getFollowerData(FollowDataRequest request){
+        FollowDataResponse response = new FollowDataResponse(testUser.getFollowers(), testUser.getFollowing());
+        //FollowDataResponse response = new FollowDataResponse(120, 45);
+        return response;
+    }
 
+    public FollowActionResponse followUser(FollowActionRequest request){
+        FollowActionResponse response = new FollowActionResponse(true, "User " + request.getUser().getAlias() + " is now following " + request.getUserToFollow().getAlias());
+        return response;
+    }
+    public FollowActionResponse unFollowUser(UnFollowActionRequest request){
+        FollowActionResponse response = new FollowActionResponse(true, "User @" + request.getUser().getAlias() + " is no longer following @" + request.getUserToUnFollow().getAlias());
+        return response;
+    }
 
 }
