@@ -489,18 +489,6 @@ public class ServerFacade {
     }
     public TweetResponse postTweet(TweetRequest request){
         // need to fix this so that it acctually uses the current user
-        Tweet newTweet = new Tweet(request.getUser(), request.getTweetBody(), request.getDate());
-        System.out.println(newTweet.toString());
-        if (request.getUser().getAlias().equals(testUser.getAlias())) {
-            System.out.println(loginStory.size());
-            loginStory.add(newTweet);
-            System.out.println(loginStory.size());
-        }
-        else {
-            System.out.println(registerStory.size());
-            registerStory.add(newTweet);
-            System.out.println(registerStory.size());
-        }
 
 
 

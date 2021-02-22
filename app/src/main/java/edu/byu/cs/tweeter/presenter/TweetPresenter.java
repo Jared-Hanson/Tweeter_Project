@@ -10,7 +10,7 @@ import edu.byu.cs.tweeter.model.service.response.LoginResponse;
 import edu.byu.cs.tweeter.model.service.response.TweetResponse;
 
 public class TweetPresenter {
-    private final TweetPresenter.View view;
+    private TweetPresenter.View view = null;
 
     /**
      * The interface by which this presenter communicates with it's view.
@@ -27,13 +27,16 @@ public class TweetPresenter {
     public TweetPresenter(TweetPresenter.View view) {
         this.view = view;
     }
+    public TweetPresenter() {
+
+    }
 
     /**
      * Makes a login request.
      *
      * @param request the request.
      */
-    public TweetResponse login(TweetRequest request) throws IOException {
+    public TweetResponse postTweet(TweetRequest request) throws IOException {
         TweetService tweetService = new TweetService();
         return tweetService.postTweet(request);
     }

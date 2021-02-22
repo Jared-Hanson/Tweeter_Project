@@ -35,6 +35,7 @@ import edu.byu.cs.tweeter.model.service.TweetService;
 import edu.byu.cs.tweeter.model.service.request.LogoutRequest;
 import edu.byu.cs.tweeter.model.service.request.TweetRequest;
 import edu.byu.cs.tweeter.model.service.response.LogoutResponse;
+import edu.byu.cs.tweeter.model.service.response.TweetResponse;
 import edu.byu.cs.tweeter.presenter.LogoutPresenter;
 import edu.byu.cs.tweeter.presenter.TweetPresenter;
 import edu.byu.cs.tweeter.view.Login.LoginActivity;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements LogoutTask.Observ
     private static final String LOG_TAG = "MainActivity";
 
     private Toast logoutToast;
+    private Toast tweetToast;
     private User user;
     private AuthToken authToken;
 
@@ -82,6 +84,9 @@ public class MainActivity extends AppCompatActivity implements LogoutTask.Observ
             @Override
             public void onClick(View view) {
                 createTweetPopUp();
+
+
+
             }
         });
 
@@ -109,22 +114,27 @@ public class MainActivity extends AppCompatActivity implements LogoutTask.Observ
 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
+        tweetToast = Toast.makeText(this, "Tweet Succesfully added to facade", Toast.LENGTH_LONG);
 
 // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                TweetResponse res = new TweetResponse(false);
                 String inText = input.getText().toString();
                 User user = (User) getIntent().getSerializableExtra(CURRENT_USER_KEY);
                 TweetRequest request = new TweetRequest(user, inText, new Date());
 
-                TweetService service = new TweetService();
+                TweetPresenter presenter = new TweetPresenter();
                 try {
-                    service.postTweet(request);
+                     res = presenter.postTweet(request);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
+                if(res.isSuccess()){
+                    tweetToast.show();
+                }
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
