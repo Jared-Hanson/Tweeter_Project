@@ -95,8 +95,7 @@ public class MainActivity extends AppCompatActivity implements LogoutTask.Observ
 
         FloatingActionButton fab = findViewById(R.id.fab);
 
-        // We should use a Java 8 lambda function for the listener (and all other listeners), but
-        // they would be unfamiliar to many students who use this code.
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
