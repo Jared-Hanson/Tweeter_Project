@@ -6,8 +6,8 @@ import edu.byu.cs.tweeter.model.service.LoginService;
 import edu.byu.cs.tweeter.model.service.request.LoginRequest;
 import edu.byu.cs.tweeter.model.service.response.LoginResponse;
 import edu.byu.cs.tweeter.presenter.Observers.LoginObserver;
-import edu.byu.cs.tweeter.view.Login.LoginFragment;
-import edu.byu.cs.tweeter.view.Login.LoginSubject;
+import edu.byu.cs.tweeter.view.main.Login.LoginFragment;
+import edu.byu.cs.tweeter.view.main.Login.LoginSubject;
 
 /**
  * The presenter for the login functionality of the application.

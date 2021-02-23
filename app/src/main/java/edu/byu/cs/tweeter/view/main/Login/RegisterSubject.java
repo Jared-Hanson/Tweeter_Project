@@ -1,4 +1,4 @@
-package edu.byu.cs.tweeter.view.Login;
+package edu.byu.cs.tweeter.view.main.Login;
 
 import androidx.fragment.app.Fragment;
 

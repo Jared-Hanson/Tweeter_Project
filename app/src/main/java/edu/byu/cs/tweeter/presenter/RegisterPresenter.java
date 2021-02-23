@@ -6,8 +6,8 @@ import edu.byu.cs.tweeter.model.service.RegisterService;
 import edu.byu.cs.tweeter.model.service.request.RegisterRequest;
 import edu.byu.cs.tweeter.model.service.response.LoginResponse;
 import edu.byu.cs.tweeter.presenter.Observers.RegisterObserver;
-import edu.byu.cs.tweeter.view.Login.RegisterFragment;
-import edu.byu.cs.tweeter.view.Login.RegisterSubject;
+import edu.byu.cs.tweeter.view.main.Login.RegisterFragment;
+import edu.byu.cs.tweeter.view.main.Login.RegisterSubject;
 
 /**
  * The presenter for the register functionality of the application.
