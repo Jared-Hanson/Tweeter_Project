@@ -1,8 +1,10 @@
 package edu.byu.cs.tweeter.view.main.Tweet;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -67,6 +70,7 @@ public class FeedFragment extends Fragment implements FeedPresenter.View{
         return fragment;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -142,7 +146,6 @@ public class FeedFragment extends Fragment implements FeedPresenter.View{
             userAlias.setText(tweet.getAuthor().getAlias());
             userName.setText(tweet.getAuthor().getName());
 
-
             date.setText(tweet.getDate().toString());
             tweetBody.setText(tweet.getBody());
         }
@@ -163,6 +166,7 @@ public class FeedFragment extends Fragment implements FeedPresenter.View{
         /**
          * Creates an instance and loads the first page of following data.
          */
+        @RequiresApi(api = Build.VERSION_CODES.O)
         StoryRecyclerViewAdapter() {
             loadMoreItems();
         }
@@ -266,6 +270,7 @@ public class FeedFragment extends Fragment implements FeedPresenter.View{
          * Causes the Adapter to display a loading footer and make a request to get more following
          * data.
          */
+        @RequiresApi(api = Build.VERSION_CODES.O)
         void loadMoreItems() {
             isLoading = true;
             addLoadingFooter();
@@ -309,8 +314,10 @@ public class FeedFragment extends Fragment implements FeedPresenter.View{
          * Adds a dummy user to the list of users so the RecyclerView will display a view (the
          * loading footer view) at the bottom of the list.
          */
+        @RequiresApi(api = Build.VERSION_CODES.O)
         private void addLoadingFooter() {
-            addItem(new Tweet(new User("Dummy", "User", ""), "User", new Date()));
+            LocalDate date = LocalDate.now();
+            addItem(new Tweet(new User("Dummy", "User", ""), "User", date));
         }
 
         /**
@@ -348,6 +355,7 @@ public class FeedFragment extends Fragment implements FeedPresenter.View{
          * @param dx the amount of horizontal scroll.
          * @param dy the amount of vertical scroll.
          */
+        @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         public void onScrolled(@NotNull RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);

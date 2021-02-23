@@ -1,7 +1,11 @@
 package edu.byu.cs.tweeter.model.net;
 
+import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,6 +40,7 @@ import edu.byu.cs.tweeter.model.service.response.TweetResponse;
  * Acts as a Facade to the Tweeter server. All network requests to the server should go through
  * this class.
  */
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class ServerFacade {
     // This is the hard coded followee data returned by the 'getFollowees()' method
     private static final String MALE_IMAGE_URL = "https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/donald_duck.png";
@@ -77,17 +82,17 @@ public class ServerFacade {
     private final List<User> registerFollowees = Collections.emptyList();
     private final List<User> registerFollowers = Collections.emptyList();
 
-    private final Date date1 = new Date();
-    private final Date date2 = new Date();
-    private final Date date3 = new Date();
-    private final Date date4 = new Date();
-    private final Date date5 = new Date();
-    private final Date date6 = new Date();
-    private final Date date7 = new Date();
-    private final Date date8 = new Date();
-    private final Date date9 = new Date();
-    private final Date date10 = new Date();
-    private final Date date11 = new Date();
+    private final LocalDate date1 = LocalDate.of(2021, 1, 8);
+    private final LocalDate date2 = LocalDate.of(2021, 2, 9);
+    private final LocalDate date3 = LocalDate.of(2020, 2, 11);
+    private final LocalDate date4 = LocalDate.of(2021, 3, 15);
+    private final LocalDate date5 = LocalDate.of(2020, 1, 18);
+    private final LocalDate date6 = LocalDate.of(2020, 1, 20);
+    private final LocalDate date7 = LocalDate.of(2021, 2, 21);
+    private final LocalDate date8 = LocalDate.of(2019, 5, 8);
+    private final LocalDate date9 = LocalDate.of(2021, 6, 29);
+    private final LocalDate date10 = LocalDate.of(2021, 1, 8);
+    private final LocalDate date11 = LocalDate.of(2021, 7, 3);
 
     private final Tweet uTweet1 = new Tweet(testUser, "what a tweet eh", date1);
     private final Tweet uTweet2 = new Tweet(testUser, "Second Tweet", date2);

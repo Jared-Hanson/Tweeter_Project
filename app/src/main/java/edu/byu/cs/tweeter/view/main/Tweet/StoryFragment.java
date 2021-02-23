@@ -1,5 +1,6 @@
 package edu.byu.cs.tweeter.view.main.Tweet;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,11 +15,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.annotation.RequiresApi;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -140,9 +143,8 @@ public class StoryFragment extends Fragment implements StoryPresenter.View{
             userImage.setImageDrawable(ImageUtils.drawableFromByteArray(tweet.getAuthor().getImageBytes()));
             userAlias.setText(tweet.getAuthor().getAlias());
             userName.setText(tweet.getAuthor().getName());
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
-            String strDate = dateFormat.format(tweet.getDate());
-            date.setText(strDate);
+
+            date.setText(tweet.getDate().toString());
             tweetBody.setText(tweet.getBody());
         }
     }
@@ -309,7 +311,8 @@ public class StoryFragment extends Fragment implements StoryPresenter.View{
          * loading footer view) at the bottom of the list.
          */
         private void addLoadingFooter() {
-            addItem(new Tweet(new User("Dummy", "User", ""), "User", new Date()));
+            @SuppressLint({"NewApi", "LocalSuppress"}) LocalDate date = LocalDate.now();
+            addItem(new Tweet(new User("Dummy", "User", ""), "User", date));
         }
 
         /**

@@ -1,16 +1,21 @@
 package edu.byu.cs.tweeter.model.domain;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import org.jetbrains.annotations.NotNull;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
 public class Tweet implements Comparable<Tweet>{
     private final User author;
     private final String body;
-    private final Date date;
+    private final LocalDate date;
 
-    public Tweet(@NotNull User author, @NotNull String body, @NotNull Date date) {
+    public Tweet(@NotNull User author, @NotNull String body, @NotNull LocalDate date) {
         this.author = author;
         this.body = body;
         this.date = date;
@@ -24,7 +29,7 @@ public class Tweet implements Comparable<Tweet>{
         return body;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
@@ -51,10 +56,11 @@ public class Tweet implements Comparable<Tweet>{
                 ", date=" + date +
                 '}';
     }
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public int compareTo(Tweet o) {
         if (this.date != o.getDate()) {
-            return this.date.compareTo(o.getDate());
+            return -1 * (this.date.compareTo(o.getDate()));
         }
         return this.getAuthor().getAlias().compareTo(o.getAuthor().getAlias());
     }
