@@ -2,7 +2,7 @@ package edu.byu.cs.tweeter.model.service.response;
 
 public class FollowActionResponse extends Response{
 
-    FollowActionResponse(boolean success) {
+    public FollowActionResponse(boolean success) {
         super(success);
     }
 

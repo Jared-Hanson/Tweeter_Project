@@ -23,7 +23,7 @@ public class UnFollowTask extends AsyncTask<UnFollowActionRequest, Void, FollowA
 
 
     public interface Observer {
-        void followersRetrieved(FollowActionResponse followerResponse);
+        void unfollowed(FollowActionResponse followerResponse);
         void handleException(Exception exception);
     }
 
@@ -62,7 +62,7 @@ public class UnFollowTask extends AsyncTask<UnFollowActionRequest, Void, FollowA
         if(exception != null) {
             observer.handleException(exception);
         } else {
-            observer.followersRetrieved(followerResponse);
+            observer.unfollowed(followerResponse);
         }
     }
 }

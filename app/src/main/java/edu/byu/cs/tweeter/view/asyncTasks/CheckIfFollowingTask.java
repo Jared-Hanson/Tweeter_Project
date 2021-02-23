@@ -15,22 +15,21 @@ import edu.byu.cs.tweeter.presenter.Follow_UnfollowActionPresenter;
 import edu.byu.cs.tweeter.presenter.FollowerDataPresenter;
 import edu.byu.cs.tweeter.presenter.FollowerPresenter;
 
-public class FollowTask extends AsyncTask<FollowActionRequest, Void, FollowActionResponse> {
+public class CheckIfFollowingTask extends AsyncTask<FollowActionRequest, Void, FollowActionResponse> {
 
     private final Follow_UnfollowActionPresenter presenter;
-    private final FollowTask.Observer observer;
+    private final CheckIfFollowingTask.Observer observer;
     private Exception exception;
 
 
 
     public interface Observer {
+        void follow(FollowActionResponse followerResponse);
         void handleException(Exception exception);
-
-        void isFollowing(FollowActionResponse followerResponse);
     }
 
 
-    public FollowTask(Follow_UnfollowActionPresenter presenter, FollowTask.Observer observer) {
+    public CheckIfFollowingTask(Follow_UnfollowActionPresenter presenter, CheckIfFollowingTask.Observer observer) {
         if(observer == null) {
             throw new NullPointerException();
         }
@@ -46,7 +45,7 @@ public class FollowTask extends AsyncTask<FollowActionRequest, Void, FollowActio
         FollowActionResponse response = null;
 
         try {
-            response = presenter.followUser(followerRequests[0]);
+            response = presenter.isFollowing(followerRequests[0]);
         } catch (IOException ex) {
             exception = ex;
         }
@@ -54,17 +53,13 @@ public class FollowTask extends AsyncTask<FollowActionRequest, Void, FollowActio
         return response;
     }
 
-    /**
-     * Notifies the observer (on the UI thread) when the task completes.
-     *
-     * @param followerResponse the response that was received by the task.
-     */
+
     @Override
     protected void onPostExecute(FollowActionResponse followerResponse) {
         if(exception != null) {
             observer.handleException(exception);
         } else {
-            observer.isFollowing(followerResponse);
+            observer.follow(followerResponse);
         }
     }
 }

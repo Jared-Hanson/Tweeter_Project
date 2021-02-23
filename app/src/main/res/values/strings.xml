@@ -22,7 +22,7 @@
     <string name="followeeCount">Following: %d</string>
     <string name="followerCount">Followers: %d</string>
     <string name="password">password</string>
-    <string name="username">/@username</string>
+    <string name="username">@username</string>
     <string name="follow">Unfollow</string>
     <string name="tweeter">tweeter</string>
     <string name="login">Login</string>

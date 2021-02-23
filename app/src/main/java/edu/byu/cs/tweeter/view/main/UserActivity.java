@@ -34,21 +34,28 @@ import edu.byu.cs.tweeter.R;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.service.TweetService;
+import edu.byu.cs.tweeter.model.service.request.FollowActionRequest;
 import edu.byu.cs.tweeter.model.service.request.FollowDataRequest;
 import edu.byu.cs.tweeter.model.service.request.LoginRequest;
 import edu.byu.cs.tweeter.model.service.request.LogoutRequest;
 import edu.byu.cs.tweeter.model.service.request.TweetRequest;
+import edu.byu.cs.tweeter.model.service.request.UnFollowActionRequest;
+import edu.byu.cs.tweeter.model.service.response.FollowActionResponse;
 import edu.byu.cs.tweeter.model.service.response.FollowDataResponse;
 import edu.byu.cs.tweeter.model.service.response.LogoutResponse;
 import edu.byu.cs.tweeter.model.service.response.TweetResponse;
+import edu.byu.cs.tweeter.presenter.Follow_UnfollowActionPresenter;
 import edu.byu.cs.tweeter.presenter.FollowerDataPresenter;
 import edu.byu.cs.tweeter.presenter.LogoutPresenter;
 import edu.byu.cs.tweeter.presenter.TweetPresenter;
 import edu.byu.cs.tweeter.view.Login.LoginActivity;
 import edu.byu.cs.tweeter.view.Login.LoginFragment;
+import edu.byu.cs.tweeter.view.asyncTasks.CheckIfFollowingTask;
+import edu.byu.cs.tweeter.view.asyncTasks.FollowTask;
 import edu.byu.cs.tweeter.view.asyncTasks.GetFollowerDataTask;
 import edu.byu.cs.tweeter.view.asyncTasks.LoginTask;
 import edu.byu.cs.tweeter.view.asyncTasks.LogoutTask;
+import edu.byu.cs.tweeter.view.asyncTasks.UnFollowTask;
 import edu.byu.cs.tweeter.view.util.ImageUtils;
 
 import static edu.byu.cs.tweeter.R.layout.activity_main;
@@ -72,6 +79,8 @@ public class UserActivity extends AppCompatActivity {
 
     private Button follow_unfollow_Button;
     private FollowerDataPresenter dataPresenter;
+    private Follow_UnfollowActionPresenter followPresenter;
+    private Boolean isFollowing = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +95,7 @@ public class UserActivity extends AppCompatActivity {
         authToken = (AuthToken) getIntent().getSerializableExtra(AUTH_TOKEN_KEY);
         loggedInUser = (User) getIntent().getSerializableExtra(LOGGED_IN_USER);
         dataPresenter = new FollowerDataPresenter();
+        followPresenter = new Follow_UnfollowActionPresenter();
 
         UserSectionsPagerAdapter sectionsPagerAdapter = new UserSectionsPagerAdapter(this, getSupportFragmentManager(), user, authToken);
         ViewPager viewPager = findViewById(R.id.view_pager);
@@ -112,13 +122,20 @@ public class UserActivity extends AppCompatActivity {
 
         follow_unfollow_Button = findViewById(R.id.FollowButton);
         follow_unfollow_Button.setEnabled(true);
+        new checkFollowers().checkIfFollowing(new FollowActionRequest(loggedInUser, user));
 
 
         follow_unfollow_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(isFollowing){
+                    // call async task/observer to do the follow/unfollow action
+                    new unFollow().unFollow(new UnFollowActionRequest(loggedInUser, user));
+                }
+                else{
 
-                System.out.println("Button Pressed");
+                    new follow().follow(new FollowActionRequest(loggedInUser, user));
+                }
             }
         });
     }
@@ -159,6 +176,84 @@ public class UserActivity extends AppCompatActivity {
 
         }
     }
+    private class checkFollowers implements CheckIfFollowingTask.Observer {
+        void checkIfFollowing(FollowActionRequest request) {
+            //FollowerDataPresenter presenter = new FollowerDataPresenter(dataPresenter);
+            CheckIfFollowingTask data = new CheckIfFollowingTask(followPresenter, this);
+            data.execute(request);
+        }
+
+
+        @Override
+        public void follow(FollowActionResponse followerResponse) {
+            if (followerResponse.isSuccess()){
+                follow_unfollow_Button.setBackgroundColor(Color.GRAY);
+                follow_unfollow_Button.setText("Unfollow");
+                isFollowing = true;
+            }
+            else{
+                follow_unfollow_Button.setBackgroundColor(Color.RED);
+                follow_unfollow_Button.setText("Follow");
+                isFollowing = false;
+            }
+
+        }
+        @Override
+        public void handleException(Exception exception) {
+            Log.e(LOG_TAG, exception.getMessage(), exception);
+            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+    }
+    private class follow implements FollowTask.Observer {
+        void follow(FollowActionRequest request) {
+
+            FollowTask data = new FollowTask(followPresenter, this);
+            data.execute(request);
+        }
+
+
+        @Override
+        public void isFollowing(FollowActionResponse followerResponse) {
+            if(followerResponse.isSuccess()){
+                isFollowing = true;
+                // update follower data
+                new getFollowerData().GetDataFunction(new FollowDataRequest(user));
+                Toast.makeText(getApplicationContext(), "User has been followed: We have received and updated follower/followee data", Toast.LENGTH_LONG).show();
+
+            }
+
+        }
+        @Override
+        public void handleException(Exception exception) {
+            Log.e(LOG_TAG, exception.getMessage(), exception);
+            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+    }
+    private class unFollow implements UnFollowTask.Observer {
+        void unFollow(UnFollowActionRequest request) {
+
+            UnFollowTask data = new UnFollowTask(followPresenter, this);
+            data.execute(request);
+        }
+
+        @Override
+        public void unfollowed(FollowActionResponse followerResponse) {
+            isFollowing = true;
+            // update follower data
+            new getFollowerData().GetDataFunction(new FollowDataRequest(user));
+            Toast.makeText(getApplicationContext(), "User has been UN-followed: We have received and updated follower/followee data", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void handleException(Exception exception) {
+            Log.e(LOG_TAG, exception.getMessage(), exception);
+            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+    }
+
 
 
 }

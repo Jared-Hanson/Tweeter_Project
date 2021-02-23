@@ -9,7 +9,7 @@ import edu.byu.cs.tweeter.model.service.request.UnFollowActionRequest;
 import edu.byu.cs.tweeter.model.service.response.FollowActionResponse;
 
 public class Follow_UnfollowActionPresenter {
-    private final Follow_UnfollowActionPresenter.View view;
+    private Follow_UnfollowActionPresenter.View view;
 
     /**
      * The interface by which this presenter communicates with it's view.
@@ -27,6 +27,9 @@ public class Follow_UnfollowActionPresenter {
         this.view = view;
     }
 
+    public Follow_UnfollowActionPresenter() {
+    }
+
     /**
      * Returns the users that the user specified in the request is following. Uses information in
      * the request object to limit the number of followees returned and to return the next set of
@@ -42,6 +45,10 @@ public class Follow_UnfollowActionPresenter {
     public FollowActionResponse unFollowUser(UnFollowActionRequest request) throws IOException {
         FollowActionService followActionService = getFollowService();
         return followActionService.unFollowUser(request);
+    }
+    public FollowActionResponse isFollowing(FollowActionRequest request) throws IOException {
+        FollowActionService followActionService = getFollowService();
+        return followActionService.isFollowing(request);
     }
 
     /**

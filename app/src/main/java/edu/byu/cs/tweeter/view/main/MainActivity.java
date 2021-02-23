@@ -14,6 +14,7 @@ import androidx.appcompat.view.menu.MenuView;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.FileUtils;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
@@ -26,7 +27,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Date;
 
 import edu.byu.cs.tweeter.R;
@@ -44,6 +49,7 @@ import edu.byu.cs.tweeter.model.service.response.TweetResponse;
 import edu.byu.cs.tweeter.presenter.FollowerDataPresenter;
 import edu.byu.cs.tweeter.presenter.LogoutPresenter;
 import edu.byu.cs.tweeter.presenter.TweetPresenter;
+import edu.byu.cs.tweeter.util.ByteArrayUtils;
 import edu.byu.cs.tweeter.view.Login.LoginActivity;
 import edu.byu.cs.tweeter.view.asyncTasks.GetFollowerDataTask;
 import edu.byu.cs.tweeter.view.asyncTasks.GetFollowerTask;
@@ -95,13 +101,14 @@ public class MainActivity extends AppCompatActivity implements LogoutTask.Observ
             @Override
             public void onClick(View view) {
                 //createTweetPopUp();
-
-                // I just need a button to test with.
                 createUserFeedTest();
+
 
 
             }
         });
+
+
 
         TextView userName = findViewById(R.id.userName);
         userName.setText(user.getName());
@@ -119,16 +126,48 @@ public class MainActivity extends AppCompatActivity implements LogoutTask.Observ
         followerCount.setText(getString(R.string.followerCount, 27));
         new getFollowerData().GetDataFunction(new FollowDataRequest(user));
     }
-    public void createUserFeedTest(){
+    public void createUserFeedTest() {
         Intent intent = new Intent(this, UserActivity.class);
 
-        intent.putExtra(UserActivity.CURRENT_USER_KEY, user);
+        String MALE_IMAGE_URL = "https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/donald_duck.png";
+        User user1 = new User("Allen", "Anderson", MALE_IMAGE_URL);
+
+        File file = new File("app/src/main/res/drawable/donald_duck.png");
+        byte[] arr = readContentIntoByteArray(file);
+        user1.setImageBytes(arr);
+
+        intent.putExtra(UserActivity.CURRENT_USER_KEY, user1);
+        //intent.putExtra(UserActivity.CURRENT_USER_KEY, user);
         intent.putExtra(UserActivity.AUTH_TOKEN_KEY, authToken);
         intent.putExtra(UserActivity.LOGGED_IN_USER, user);
 
 
         startActivity(intent);
     }
+    // only needed for testing with specific users here
+    private static byte[] readContentIntoByteArray(File file)
+    {
+        FileInputStream fileInputStream = null;
+        byte[] bFile = new byte[(int) file.length()];
+        try
+        {
+            //convert file into array of bytes
+            fileInputStream = new FileInputStream(file);
+            fileInputStream.read(bFile);
+            fileInputStream.close();
+            for (int i = 0; i < bFile.length; i++)
+            {
+                System.out.print((char) bFile[i]);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return bFile;
+    }
+
+
 
 
 

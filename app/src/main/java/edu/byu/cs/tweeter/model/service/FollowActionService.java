@@ -14,6 +14,10 @@ public class FollowActionService {
         FollowActionResponse res = getServerFacade().unFollowUser(request);
         return res;
     }
+    public FollowActionResponse isFollowing(FollowActionRequest request){
+        FollowActionResponse res = getServerFacade().isFollowing(request);
+        return res;
+    }
     ServerFacade getServerFacade() {
         return new ServerFacade();
     }

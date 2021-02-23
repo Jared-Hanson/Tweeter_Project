@@ -64,13 +64,15 @@ public class ServerFacade {
     private final User user19 = new User("Justin", "Jones", MALE_IMAGE_URL);
     private final User user20 = new User("Jill", "Johnson", FEMALE_IMAGE_URL);
 
-    private final List<User> loginFollowees = Arrays.asList(user1, user2, user3, user4, user5, user6, user7,
+
+    private List<User> loginFollowees = Arrays.asList(user1, user2, user3, user4, user5, user6, user7,
             user8, user9, user10, user11, user12, user13, user14, user15, user16, user17, user18,
             user19, user20);
 
     private final List<User> loginFollowers = Arrays.asList(user3, user4, user5, user6, user7, user15,
             user16, user17, user18, user19, user20);
     private final User testUser = new User("Test", "User", "@dummyUserName", MALE_IMAGE_URL, loginFollowers.size(), loginFollowees.size());
+
 
     private final List<User> registerFollowees = Collections.emptyList();
     private final List<User> registerFollowers = Collections.emptyList();
@@ -522,6 +524,16 @@ public class ServerFacade {
     }
     public FollowActionResponse unFollowUser(UnFollowActionRequest request){
         FollowActionResponse response = new FollowActionResponse(true, "User @" + request.getUser().getAlias() + " is no longer following @" + request.getUserToUnFollow().getAlias());
+        return response;
+    }
+    public FollowActionResponse isFollowing(FollowActionRequest request){
+        FollowActionResponse response;
+        if(loginFollowees.contains(request.getUserToFollow())) {
+             response = new FollowActionResponse(true);
+        }
+        else{
+             response = new FollowActionResponse(false);
+        }
         return response;
     }
 
