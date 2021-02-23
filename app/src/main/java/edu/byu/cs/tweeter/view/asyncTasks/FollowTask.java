@@ -26,7 +26,7 @@ public class FollowTask extends AsyncTask<FollowActionRequest, Void, FollowActio
     public interface Observer {
         void handleException(Exception exception);
 
-        void isFollowing(FollowActionResponse followerResponse);
+        void run(FollowActionResponse followerResponse);
     }
 
 
@@ -64,7 +64,7 @@ public class FollowTask extends AsyncTask<FollowActionRequest, Void, FollowActio
         if(exception != null) {
             observer.handleException(exception);
         } else {
-            observer.isFollowing(followerResponse);
+            observer.run(followerResponse);
         }
     }
 }

@@ -10,7 +10,7 @@ public class FollowActionService {
         FollowActionResponse res = getServerFacade().followUser(request);
         return res;
     }
-    public FollowActionResponse unFollowUser(UnFollowActionRequest request){
+    public FollowActionResponse unFollowUser(FollowActionRequest request){
         FollowActionResponse res = getServerFacade().unFollowUser(request);
         return res;
     }

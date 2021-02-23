@@ -42,7 +42,7 @@ public class Follow_UnfollowActionPresenter {
         FollowActionService followActionService = getFollowService();
         return followActionService.followUser(request);
     }
-    public FollowActionResponse unFollowUser(UnFollowActionRequest request) throws IOException {
+    public FollowActionResponse unFollowUser(FollowActionRequest request) throws IOException {
         FollowActionService followActionService = getFollowService();
         return followActionService.unFollowUser(request);
     }

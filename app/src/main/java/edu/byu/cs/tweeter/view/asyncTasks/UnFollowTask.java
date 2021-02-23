@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import java.io.IOException;
 
+import edu.byu.cs.tweeter.model.service.request.FollowActionRequest;
 import edu.byu.cs.tweeter.model.service.request.FollowDataRequest;
 import edu.byu.cs.tweeter.model.service.request.FollowerRequest;
 import edu.byu.cs.tweeter.model.service.request.UnFollowActionRequest;
@@ -14,7 +15,7 @@ import edu.byu.cs.tweeter.presenter.Follow_UnfollowActionPresenter;
 import edu.byu.cs.tweeter.presenter.FollowerDataPresenter;
 import edu.byu.cs.tweeter.presenter.FollowerPresenter;
 
-public class UnFollowTask extends AsyncTask<UnFollowActionRequest, Void, FollowActionResponse> {
+public class UnFollowTask extends AsyncTask<FollowActionRequest, Void, FollowActionResponse> {
 
     private final Follow_UnfollowActionPresenter presenter;
     private final UnFollowTask.Observer observer;
@@ -23,7 +24,7 @@ public class UnFollowTask extends AsyncTask<UnFollowActionRequest, Void, FollowA
 
 
     public interface Observer {
-        void unfollowed(FollowActionResponse followerResponse);
+        void run(FollowActionResponse followerResponse);
         void handleException(Exception exception);
     }
 
@@ -39,7 +40,7 @@ public class UnFollowTask extends AsyncTask<UnFollowActionRequest, Void, FollowA
 
 
     @Override
-    protected FollowActionResponse doInBackground(UnFollowActionRequest... followerRequests) {
+    protected FollowActionResponse doInBackground(FollowActionRequest... followerRequests) {
 
         FollowActionResponse response = null;
 
@@ -62,7 +63,7 @@ public class UnFollowTask extends AsyncTask<UnFollowActionRequest, Void, FollowA
         if(exception != null) {
             observer.handleException(exception);
         } else {
-            observer.unfollowed(followerResponse);
+            observer.run(followerResponse);
         }
     }
 }

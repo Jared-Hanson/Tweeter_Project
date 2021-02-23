@@ -526,8 +526,8 @@ public class ServerFacade {
         FollowActionResponse response = new FollowActionResponse(true, "User " + request.getUser().getAlias() + " is now following " + request.getUserToFollow().getAlias());
         return response;
     }
-    public FollowActionResponse unFollowUser(UnFollowActionRequest request){
-        FollowActionResponse response = new FollowActionResponse(true, "User @" + request.getUser().getAlias() + " is no longer following @" + request.getUserToUnFollow().getAlias());
+    public FollowActionResponse unFollowUser(FollowActionRequest request){
+        FollowActionResponse response = new FollowActionResponse(true, "User @" + request.getUser().getAlias() + " is no longer following @" + request.getUserToFollow().getAlias());
         return response;
     }
     public FollowActionResponse isFollowing(FollowActionRequest request){
