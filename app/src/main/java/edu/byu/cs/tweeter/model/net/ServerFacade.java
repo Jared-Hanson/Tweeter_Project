@@ -77,17 +77,17 @@ public class ServerFacade {
     private final List<User> registerFollowees = Collections.emptyList();
     private final List<User> registerFollowers = Collections.emptyList();
 
-    private final Date date1 = new Date(2010, 12, 6);
-    private final Date date2 = new Date(2021, 8, 5);
-    private final Date date3 = new Date(2020, 6, 2);
-    private final Date date4 = new Date(2010, 12, 1);
-    private final Date date5 = new Date(2021, 8, 2);
-    private final Date date6 = new Date(2020, 6, 6);
-    private final Date date7 = new Date(2020, 4, 6);
-    private final Date date8 = new Date(2010, 12, 2);
-    private final Date date9 = new Date(2019, 8, 2);
-    private final Date date10 = new Date(2011, 6, 6);
-    private final Date date11 = new Date(2015, 4, 6);
+    private final Date date1 = new Date();
+    private final Date date2 = new Date();
+    private final Date date3 = new Date();
+    private final Date date4 = new Date();
+    private final Date date5 = new Date();
+    private final Date date6 = new Date();
+    private final Date date7 = new Date();
+    private final Date date8 = new Date();
+    private final Date date9 = new Date();
+    private final Date date10 = new Date();
+    private final Date date11 = new Date();
 
     private final Tweet uTweet1 = new Tweet(testUser, "what a tweet eh", date1);
     private final Tweet uTweet2 = new Tweet(testUser, "Second Tweet", date2);
@@ -230,6 +230,8 @@ public class ServerFacade {
         List<Tweet> allTweets = getDummyTweetsStory(request.getUserAlias());
         List<Tweet> responseTweets = new ArrayList<>(request.getLimit());
 
+        Collections.sort(allTweets);
+
         boolean hasMorePages = false;
 
         if(request.getLimit() > 0) {
@@ -259,6 +261,8 @@ public class ServerFacade {
 
         List<Tweet> allTweets = getDummyTweetsFeed(request.getUserAlias());
         List<Tweet> responseTweets = new ArrayList<>(request.getLimit());
+
+        Collections.sort(allTweets);
 
         boolean hasMorePages = false;
 

@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -138,7 +140,9 @@ public class StoryFragment extends Fragment implements StoryPresenter.View{
             userImage.setImageDrawable(ImageUtils.drawableFromByteArray(tweet.getAuthor().getImageBytes()));
             userAlias.setText(tweet.getAuthor().getAlias());
             userName.setText(tweet.getAuthor().getName());
-            date.setText(tweet.getDate().toString());
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            String strDate = dateFormat.format(tweet.getDate());
+            date.setText(strDate);
             tweetBody.setText(tweet.getBody());
         }
     }

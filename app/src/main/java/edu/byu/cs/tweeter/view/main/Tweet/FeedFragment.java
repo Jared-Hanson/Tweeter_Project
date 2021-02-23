@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -139,6 +141,8 @@ public class FeedFragment extends Fragment implements FeedPresenter.View{
             userImage.setImageDrawable(ImageUtils.drawableFromByteArray(tweet.getAuthor().getImageBytes()));
             userAlias.setText(tweet.getAuthor().getAlias());
             userName.setText(tweet.getAuthor().getName());
+
+
             date.setText(tweet.getDate().toString());
             tweetBody.setText(tweet.getBody());
         }
