@@ -9,7 +9,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import edu.byu.cs.tweeter.BuildConfig;
@@ -25,11 +24,11 @@ import edu.byu.cs.tweeter.model.service.request.LogoutRequest;
 import edu.byu.cs.tweeter.model.service.request.RegisterRequest;
 import edu.byu.cs.tweeter.model.service.request.StoryRequest;
 import edu.byu.cs.tweeter.model.service.request.TweetRequest;
-import edu.byu.cs.tweeter.model.service.request.UnFollowActionRequest;
 import edu.byu.cs.tweeter.model.service.response.FollowActionResponse;
 import edu.byu.cs.tweeter.model.service.response.FollowDataResponse;
 import edu.byu.cs.tweeter.model.service.response.FollowerResponse;
 import edu.byu.cs.tweeter.model.service.response.FollowingResponse;
+import edu.byu.cs.tweeter.model.service.response.GetUserDataResponse;
 import edu.byu.cs.tweeter.model.service.response.LoginResponse;
 
 import edu.byu.cs.tweeter.model.service.response.LogoutResponse;
@@ -96,7 +95,7 @@ public class ServerFacade {
 
     private final Tweet uTweet1 = new Tweet(testUser, "what a tweet eh", date1);
     private final Tweet uTweet2 = new Tweet(testUser, "Second Tweet", date2);
-    private final Tweet uTweet3 = new Tweet(testUser, "What a tweet tweet", date3);
+    private final Tweet uTweet3 = new Tweet(testUser, "What https://nba.com a tweet https://byu.edu", date3);
 
     private final Tweet fTweet1 = new Tweet(user3, "I hate dummy data", date4);
     private final Tweet fTweet2 = new Tweet(user5, "Who did that?", date5);
@@ -544,6 +543,15 @@ public class ServerFacade {
              response = new FollowActionResponse(false);
         }
         return response;
+    }
+
+    public GetUserDataResponse getUserFromAlias(String alias) {
+        for(User user : loginFollowees) {
+            if(user.getAlias().equals(alias)) {
+                return new GetUserDataResponse(user);
+            }
+        }
+        return null;
     }
 
 }

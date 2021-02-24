@@ -1,5 +1,7 @@
 package edu.byu.cs.tweeter.view.main.Tweet;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -9,6 +11,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,9 +36,12 @@ import edu.byu.cs.tweeter.R;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.Tweet;
 import edu.byu.cs.tweeter.model.domain.User;
+import edu.byu.cs.tweeter.model.service.GetUserDataService;
 import edu.byu.cs.tweeter.model.service.request.FollowingRequest;
+import edu.byu.cs.tweeter.model.service.request.GetUserDataRequest;
 import edu.byu.cs.tweeter.model.service.request.StoryRequest;
 import edu.byu.cs.tweeter.model.service.response.FollowingResponse;
+import edu.byu.cs.tweeter.model.service.response.GetUserDataResponse;
 import edu.byu.cs.tweeter.model.service.response.StoryResponse;
 import edu.byu.cs.tweeter.presenter.FeedPresenter;
 import edu.byu.cs.tweeter.presenter.FollowingPresenter;
@@ -40,10 +49,11 @@ import edu.byu.cs.tweeter.presenter.StoryPresenter;
 import edu.byu.cs.tweeter.view.asyncTasks.GetFeedTask;
 import edu.byu.cs.tweeter.view.asyncTasks.GetFollowingTask;
 import edu.byu.cs.tweeter.view.asyncTasks.GetStoryTask;
+import edu.byu.cs.tweeter.view.asyncTasks.GetUserDataTask;
 import edu.byu.cs.tweeter.view.main.following.FollowingFragment;
 import edu.byu.cs.tweeter.view.util.ImageUtils;
 
-public class FeedFragment extends Fragment implements FeedPresenter.View{
+public class FeedFragment extends Fragment implements FeedPresenter.View, GetUserDataTask.Observer {
     private static final String LOG_TAG = "FeedFragment";
     private static final String USER_KEY = "UserKey";
     private static final String AUTH_TOKEN_KEY = "AuthTokenKey";
@@ -93,6 +103,17 @@ public class FeedFragment extends Fragment implements FeedPresenter.View{
         storyRecyclerView.addOnScrollListener(new FeedFragment.StoryRecyclerViewPaginationScrollListener(layoutManager));
 
         return view;
+    }
+
+    @Override
+    public void getUserDataSuccessful(GetUserDataResponse getUserDataResponse) {
+        //put function here
+        Log.d("count", "getUserDataSuccessful: " + getUserDataResponse.getUser().getAlias());
+    }
+
+    @Override
+    public void getUserDataUnsuccessful(GetUserDataResponse getUserDataResponse) {
+        Toast.makeText(getActivity(), "Failed to get user data. " + getUserDataResponse.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -147,7 +168,60 @@ public class FeedFragment extends Fragment implements FeedPresenter.View{
             userName.setText(tweet.getAuthor().getName());
 
             date.setText(tweet.getDate().toString());
-            tweetBody.setText(tweet.getBody());
+            tweetBody.setMovementMethod(LinkMovementMethod.getInstance());
+
+            String body = tweet.getBody();
+            int start;
+            int end;
+            if(body.contains("https")) {
+                SpannableString spannableString = new SpannableString(body);
+                end = -1;
+                while((start = body.indexOf("https", end + 1)) != -1) {
+                    end = start + 1;
+                    for(int i = end; i < body.length(); i++) {
+                        if(Character.isWhitespace(body.charAt(i))) {
+                            break;
+                        }
+                        end = i + 1;
+                    }
+                    String url = body.substring(start, end);
+                    spannableString.setSpan(new ClickableSpan() {
+                        @Override
+                        public void onClick(View widget) {
+                            Uri uri = Uri.parse(url);
+                            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                            startActivity(intent);
+                        }
+                    }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+                tweetBody.setText(spannableString);
+            } else if (body.contains("@")) {
+                SpannableString spannableString = new SpannableString(body);
+                end = -1;
+                while((start = body.indexOf("@", end + 1)) != -1) {
+                    end = start + 1;
+                    for(int i = end; i < body.length(); i++) {
+                        if(Character.isWhitespace(body.charAt(i))) {
+                            break;
+                        }
+                        end = i + 1;
+                    }
+                    String mentionAlias = body.substring(start, end);
+                    spannableString.setSpan(new ClickableSpan() {
+                        @Override
+                        public void onClick(View widget) {
+                            GetUserDataRequest getUserDataRequest = new GetUserDataRequest(mentionAlias);
+                            GetUserDataService getUserDataService = new GetUserDataService();
+                            GetUserDataTask getUserDataTask = new GetUserDataTask(getUserDataService, FeedFragment.this);
+                            getUserDataTask.execute(getUserDataRequest);
+
+                        }
+                    }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+                tweetBody.setText(spannableString);
+            } else {
+                tweetBody.setText(body);
+            }
         }
     }
 

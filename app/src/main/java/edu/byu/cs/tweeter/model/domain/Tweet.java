@@ -1,14 +1,19 @@
 package edu.byu.cs.tweeter.model.domain;
 
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
+import edu.byu.cs.tweeter.model.net.ServerFacade;
+
 
 public class Tweet implements Comparable<Tweet>{
     private final User author;
