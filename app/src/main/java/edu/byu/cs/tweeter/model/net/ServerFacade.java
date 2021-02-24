@@ -525,7 +525,14 @@ public class ServerFacade {
 
     }
     public FollowDataResponse getFollowerData(FollowDataRequest request){
-        FollowDataResponse response = new FollowDataResponse(testUser.getFollowers(), testUser.getFollowing());
+        FollowDataResponse response;
+        if(request.getUser().equals(testUser)) {
+
+            response = new FollowDataResponse(testUser.getFollowers(), testUser.getFollowing());
+        }
+        else{
+            response = new FollowDataResponse(0, 1);
+        }
         //FollowDataResponse response = new FollowDataResponse(120, 45);
         return response;
     }
