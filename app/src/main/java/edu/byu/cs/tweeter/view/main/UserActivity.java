@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.viewpager.widget.ViewPager;
@@ -64,6 +65,9 @@ public class UserActivity extends AppCompatActivity {
         if(user == null) {
             throw new RuntimeException("User not passed to activity");
         }
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.hide();
 
         authToken = (AuthToken) getIntent().getSerializableExtra(AUTH_TOKEN_KEY);
         loggedInUser = (User) getIntent().getSerializableExtra(LOGGED_IN_USER);

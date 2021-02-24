@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Date;
+import java.time.LocalDate;
 
 import edu.byu.cs.tweeter.R;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements LogoutTask.Observ
         tabs.setupWithViewPager(viewPager);
 
         FloatingActionButton fab = findViewById(R.id.fab);
+
 
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -205,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements LogoutTask.Observ
 
                 String inText = input.getText().toString();
                 User user = (User) getIntent().getSerializableExtra(CURRENT_USER_KEY);
-                TweetRequest request = new TweetRequest(user, inText, new Date());
+                TweetRequest request = new TweetRequest(user, inText, LocalDate.now());
                 new postTweetDialogBOX().postTweet(request);
 
             }

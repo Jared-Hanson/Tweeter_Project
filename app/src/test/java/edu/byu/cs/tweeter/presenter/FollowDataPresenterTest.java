@@ -17,25 +17,25 @@ public class FollowDataPresenterTest {
     private FollowDataRequest request;
     private FollowDataResponse response;
     private FollowDataService mockFollowDataService;
-    private FollowDataPresenter presenter;
+    private FollowerDataPresenter presenter;
 
     @BeforeEach
     public void setup() throws IOException {
         User currentUser = new User("FirstName", "LastName", null);
 
-        request = new FollowingRequest(currentUser);
-        response = new FollowingResponse(1, 1);
+        request = new FollowDataRequest(currentUser);
+        response = new FollowDataResponse(1, 1);
 
         mockFollowDataService = Mockito.mock(FollowDataService.class);
         Mockito.when(mockFollowDataService.getFollowerData(request)).thenReturn(response);
 
-        presenter = Mockito.spy(new FollowDataPresenter(new FollowDataPresenter.View() {}));
-        Mockito.when(presenter.getFollowDataService()).thenReturn(mockFollowDataService);
+        presenter = Mockito.spy(new FollowerDataPresenter(new FollowerDataPresenter.View() {}));
+        Mockito.when(presenter.getFollowerService()).thenReturn(mockFollowDataService);
     }
 
     @Test
     public void testGetFollowingData_returnsServiceResult() throws IOException {
-        Mockito.when(mockFollowingService.getFollowerData(request)).thenReturn(response);
+        Mockito.when(mockFollowDataService.getFollowerData(request)).thenReturn(response);
 
         // Assert that the presenter returns the same response as the service (it doesn't do
         // anything else, so there's nothing else to test).
@@ -44,7 +44,7 @@ public class FollowDataPresenterTest {
 
     @Test
     public void testGetFollowingData_serviceThrowsIOException_presenterThrowsIOException() throws IOException {
-        Mockito.when(mockFollowingService.getFollowerData(request)).thenThrow(new IOException());
+        Mockito.when(mockFollowDataService.getFollowerData(request)).thenThrow(new IOException());
 
         Assertions.assertThrows(IOException.class, () -> {
             presenter.getFollowingData(request);

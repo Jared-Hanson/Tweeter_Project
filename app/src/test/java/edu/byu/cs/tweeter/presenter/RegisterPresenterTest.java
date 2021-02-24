@@ -26,7 +26,7 @@ public class RegisterPresenterTest {
         User currentUser = new User("FirstName", "LastName", null);
         AuthToken token = new AuthToken();
 
-        request = new LoginRequest("FirstName", "LastName", "@testUser", "password", null);
+        request = new RegisterRequest("FirstName", "LastName", "@testUser", "password", null);
         response = new LoginResponse(currentUser, token);
 
         mockRegisterService = Mockito.mock(RegisterService.class);

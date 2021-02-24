@@ -7,6 +7,7 @@ import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Arrays;
 
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.domain.Tweet;
@@ -19,7 +20,7 @@ public class FeedPresenterTest {
     private StoryResponse response;
     private StoryRequest request;
     private FeedService mockFeedService;
-    private FeedPresenter feedPresenter;
+    private FeedPresenter presenter;
 
     @BeforeEach
     public void setup() throws IOException {

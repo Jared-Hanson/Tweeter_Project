@@ -23,6 +23,7 @@ class ServerFacadeTest {
     private final User user6 = new User("Mother", "Teresa", "");
     private final User user7 = new User("Harriett", "Hansen", "");
     private final User user8 = new User("Zoe", "Zabriski", "");
+    private final String alias = "testUser";
 
     private ServerFacade serverFacadeSpy;
 
@@ -34,7 +35,7 @@ class ServerFacadeTest {
     @Test
     void testGetFollowees_noFolloweesForUser() {
         List<User> followees = Collections.emptyList();
-        Mockito.when(serverFacadeSpy.getDummyFollowees()).thenReturn(followees);
+        Mockito.when(serverFacadeSpy.getDummyFollowees(alias)).thenReturn(followees);
 
         FollowingRequest request = new FollowingRequest(user1.getAlias(), 10, null);
         FollowingResponse response = serverFacadeSpy.getFollowees(request);
@@ -46,7 +47,7 @@ class ServerFacadeTest {
     @Test
     void testGetFollowees_oneFollowerForUser_limitGreaterThanUsers() {
         List<User> followees = Collections.singletonList(user2);
-        Mockito.when(serverFacadeSpy.getDummyFollowees()).thenReturn(followees);
+        Mockito.when(serverFacadeSpy.getDummyFollowees(alias)).thenReturn(followees);
 
         FollowingRequest request = new FollowingRequest(user1.getAlias(), 10, null);
         FollowingResponse response = serverFacadeSpy.getFollowees(request);
@@ -59,7 +60,7 @@ class ServerFacadeTest {
     @Test
     void testGetFollowees_twoFollowersForUser_limitEqualsUsers() {
         List<User> followees = Arrays.asList(user2, user3);
-        Mockito.when(serverFacadeSpy.getDummyFollowees()).thenReturn(followees);
+        Mockito.when(serverFacadeSpy.getDummyFollowees(alias)).thenReturn(followees);
 
         FollowingRequest request = new FollowingRequest(user3.getAlias(), 2, null);
         FollowingResponse response = serverFacadeSpy.getFollowees(request);
@@ -73,7 +74,7 @@ class ServerFacadeTest {
     @Test
     void testGetFollowees_limitLessThanUsers_endsOnPageBoundary() {
         List<User> followees = Arrays.asList(user2, user3, user4, user5, user6, user7);
-        Mockito.when(serverFacadeSpy.getDummyFollowees()).thenReturn(followees);
+        Mockito.when(serverFacadeSpy.getDummyFollowees(alias)).thenReturn(followees);
 
         FollowingRequest request = new FollowingRequest(user5.getAlias(), 2, null);
         FollowingResponse response = serverFacadeSpy.getFollowees(request);
@@ -107,7 +108,7 @@ class ServerFacadeTest {
     @Test
     void testGetFollowees_limitLessThanUsers_notEndsOnPageBoundary() {
         List<User> followees = Arrays.asList(user2, user3, user4, user5, user6, user7, user8);
-        Mockito.when(serverFacadeSpy.getDummyFollowees()).thenReturn(followees);
+        Mockito.when(serverFacadeSpy.getDummyFollowees(alias)).thenReturn(followees);
 
         FollowingRequest request = new FollowingRequest(user6.getAlias(), 2, null);
         FollowingResponse response = serverFacadeSpy.getFollowees(request);

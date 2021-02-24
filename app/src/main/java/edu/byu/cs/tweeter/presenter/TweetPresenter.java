@@ -37,7 +37,9 @@ public class TweetPresenter {
      * @param request the request.
      */
     public TweetResponse postTweet(TweetRequest request) throws IOException {
-        TweetService tweetService = new TweetService();
+        TweetService tweetService = getTweetService();
         return tweetService.postTweet(request);
     }
+
+    TweetService getTweetService() {return new TweetService();}
 }
