@@ -176,12 +176,11 @@ public class MainActivity extends AppCompatActivity implements LogoutTask.Observ
         logoutToast = Toast.makeText(this, "logging out", Toast.LENGTH_LONG);
         logoutToast.show();
 
-        LogoutPresenter logoutPresenter = new LogoutPresenter(findViewById(android.R.id.content).getRootView());
+        LogoutPresenter logoutPresenter = new LogoutPresenter(getCurrentFocus());
 
         LogoutRequest logoutRequest = new LogoutRequest(user, authToken);
         LogoutTask logoutTask = new LogoutTask(logoutPresenter, this);
         logoutTask.execute(logoutRequest);
-
     }
 
     @Override
