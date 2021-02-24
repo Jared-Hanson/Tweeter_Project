@@ -15,6 +15,11 @@ public class GetUserDataResponse extends Response{
         this.user = user;
     }
 
+    public GetUserDataResponse(boolean success, User user) {
+        super(success);
+        this.user = user;
+    }
+
     public User getUser() {
         return user;
     }
