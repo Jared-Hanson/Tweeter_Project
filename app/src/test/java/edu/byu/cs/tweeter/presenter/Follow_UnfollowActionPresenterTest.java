@@ -27,7 +27,7 @@ public class Follow_UnfollowActionPresenterTest {
                 "https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/donald_duck.png");
 
         request = new FollowActionRequest(currentUser, otherUser);
-        response = new FollowingResponse(true);
+        response = new FollowActionResponse(true);
 
         // Create a mock FollowingService
         mockFollowActionService = Mockito.mock(FollowActionService.class);
@@ -42,7 +42,7 @@ public class Follow_UnfollowActionPresenterTest {
 
     @Test
     public void testFollowUser_returnsServiceResult() throws IOException {
-        Mockito.when(mockFollowingService.followUser(request)).thenReturn(response);
+        Mockito.when(mockFollowActionService.followUser(request)).thenReturn(response);
 
         // Assert that the presenter returns the same response as the service (it doesn't do
         // anything else, so there's nothing else to test).
@@ -51,7 +51,7 @@ public class Follow_UnfollowActionPresenterTest {
 
     @Test
     public void testUnFollowUser_returnsServiceResult() throws IOException {
-        Mockito.when(mockFollowingService.unFollowUser(request)).thenReturn(response);
+        Mockito.when(mockFollowActionService.unFollowUser(request)).thenReturn(response);
 
         // Assert that the presenter returns the same response as the service (it doesn't do
         // anything else, so there's nothing else to test).
@@ -60,7 +60,7 @@ public class Follow_UnfollowActionPresenterTest {
 
     @Test
     public void testIsFollowing_returnsServiceResult() throws IOException {
-        Mockito.when(mockFollowingService.isFollowing(request)).thenReturn(response);
+        Mockito.when(mockFollowActionService.isFollowing(request)).thenReturn(response);
 
         // Assert that the presenter returns the same response as the service (it doesn't do
         // anything else, so there's nothing else to test).
@@ -78,7 +78,7 @@ public class Follow_UnfollowActionPresenterTest {
 
     @Test
     public void testUnFollowUser_serviceThrowsIOException_presenterThrowsIOException() throws IOException {
-        Mockito.when(mockFollowingService.unFollowUser(request)).thenThrow(new IOException());
+        Mockito.when(mockFollowActionService.unFollowUser(request)).thenThrow(new IOException());
 
         Assertions.assertThrows(IOException.class, () -> {
             presenter.unFollowUser(request);
@@ -87,7 +87,7 @@ public class Follow_UnfollowActionPresenterTest {
 
     @Test
     public void testIsFollowing_serviceThrowsIOException_presenterThrowsIOException() throws IOException {
-        Mockito.when(mockFollowingService.isFollowing(request)).thenThrow(new IOException());
+        Mockito.when(mockFollowActionService.isFollowing(request)).thenThrow(new IOException());
 
         Assertions.assertThrows(IOException.class, () -> {
             presenter.isFollowing(request);

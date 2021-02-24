@@ -50,7 +50,9 @@ public class RegisterPresenter implements RegisterObserver {
      * @param registerRequest the request.
      */
     public LoginResponse register(RegisterRequest registerRequest) throws IOException {
-        RegisterService registerService = new RegisterService();
+        RegisterService registerService = getRegisterService();
         return registerService.register(registerRequest);
     }
+
+    RegisterService getRegisterService() {return new RegisterService();}
 }

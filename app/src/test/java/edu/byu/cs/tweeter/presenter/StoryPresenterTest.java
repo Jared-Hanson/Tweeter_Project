@@ -7,6 +7,7 @@ import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Arrays;
 
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.domain.Tweet;
@@ -19,7 +20,7 @@ public class StoryPresenterTest {
     private StoryResponse response;
     private StoryRequest request;
     private StoryService mockStoryService;
-    private StoryPresenter StoryPresenter;
+    private StoryPresenter presenter;
 
     @BeforeEach
     public void setup() throws IOException {
@@ -61,7 +62,7 @@ public class StoryPresenterTest {
 
     @Test
     public void testGetStory_serviceThrowsIOException_presenterThrowsIOException() throws IOException {
-        Mockito.when(mockFeedService.getStory(request)).thenThrow(new IOException());
+        Mockito.when(mockStoryService.getStory(request)).thenThrow(new IOException());
 
         Assertions.assertThrows(IOException.class, () -> {
             presenter.getStory(request);
