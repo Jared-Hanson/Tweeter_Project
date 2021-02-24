@@ -39,6 +39,7 @@ public class RegisterFragment extends RegisterSubject implements RegisterPresent
     private EditText lastNameEditText;
     private EditText usernameEditText;
     private EditText passwordEditText;
+    private boolean hasPicture;
 
     /**
      * Creates an instance of the fragment and places the user and auth token in an arguments
@@ -68,6 +69,7 @@ public class RegisterFragment extends RegisterSubject implements RegisterPresent
         lastNameEditText = view.findViewById(R.id.lastName);
         usernameEditText = view.findViewById(R.id.username);
         passwordEditText = view.findViewById(R.id.password);
+        hasPicture = false;
 
         firstNameEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -82,7 +84,7 @@ public class RegisterFragment extends RegisterSubject implements RegisterPresent
 
             @Override
             public void afterTextChanged(Editable s) {
-                Notify(firstNameEditText.getText().toString(), lastNameEditText.getText().toString(), usernameEditText.getText().toString(), passwordEditText.getText().toString());
+                Notify(firstNameEditText.getText().toString(), lastNameEditText.getText().toString(), usernameEditText.getText().toString(), passwordEditText.getText().toString(), hasPicture);
             }
         });
 
@@ -99,7 +101,7 @@ public class RegisterFragment extends RegisterSubject implements RegisterPresent
 
             @Override
             public void afterTextChanged(Editable s) {
-                Notify(firstNameEditText.getText().toString(), lastNameEditText.getText().toString(), usernameEditText.getText().toString(), passwordEditText.getText().toString());
+                Notify(firstNameEditText.getText().toString(), lastNameEditText.getText().toString(), usernameEditText.getText().toString(), passwordEditText.getText().toString(), hasPicture);
             }
         });
 
@@ -116,7 +118,7 @@ public class RegisterFragment extends RegisterSubject implements RegisterPresent
 
             @Override
             public void afterTextChanged(Editable s) {
-                Notify(firstNameEditText.getText().toString(), lastNameEditText.getText().toString(), usernameEditText.getText().toString(), passwordEditText.getText().toString());
+                Notify(firstNameEditText.getText().toString(), lastNameEditText.getText().toString(), usernameEditText.getText().toString(), passwordEditText.getText().toString(), hasPicture);
             }
         });
 
@@ -133,7 +135,7 @@ public class RegisterFragment extends RegisterSubject implements RegisterPresent
 
             @Override
             public void afterTextChanged(Editable s) {
-                Notify(firstNameEditText.getText().toString(), lastNameEditText.getText().toString(), usernameEditText.getText().toString(), passwordEditText.getText().toString());
+                Notify(firstNameEditText.getText().toString(), lastNameEditText.getText().toString(), usernameEditText.getText().toString(), passwordEditText.getText().toString(), hasPicture);
             }
         });
 
@@ -168,6 +170,10 @@ public class RegisterFragment extends RegisterSubject implements RegisterPresent
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             photo.compress(Bitmap.CompressFormat.JPEG, 80, stream);
             imageBytes = stream.toByteArray();
+            hasPicture = true;
+            Notify(firstNameEditText.getText().toString(), lastNameEditText.getText().toString(), usernameEditText.getText().toString(), passwordEditText.getText().toString(), hasPicture);
+        } else {
+            imageBytes = null;
         }
     }
 

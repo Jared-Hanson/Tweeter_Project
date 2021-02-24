@@ -17,10 +17,10 @@ public class RegisterPresenter implements RegisterObserver {
     private final View view;
 
     @Override
-    public void Update(RegisterSubject subject, String first, String last, String username, String password) {
+    public void Update(RegisterSubject subject, String first, String last, String username, String password, boolean hasPicture) {
         if(subject instanceof RegisterFragment) {
             RegisterFragment registerFragment = (RegisterFragment) subject;
-            if(first.length() > 0 && last.length() > 0 && username.length() > 0 && password.length() >= 6) {
+            if(first.length() > 0 && last.length() > 0 && username.length() > 0 && password.length() >= 6 && hasPicture) {
                 registerFragment.setButton(true);
             } else {
                 registerFragment.setButton(false);

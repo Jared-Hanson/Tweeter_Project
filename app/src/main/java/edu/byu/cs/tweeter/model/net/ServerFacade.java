@@ -97,7 +97,7 @@ public class ServerFacade {
     private final LocalDate date11 = LocalDate.of(2021, 7, 3);
 
     private final Tweet uTweet1 = new Tweet(testUser, "what a tweet eh", date1);
-    private final Tweet uTweet2 = new Tweet(testUser, "Second Tweet", date2);
+    private final Tweet uTweet2 = new Tweet(testUser, "Second Tweet" + user9.getAlias(), date2);
     private final Tweet uTweet3 = new Tweet(testUser, "What https://nba.com a tweet https://byu.edu", date3);
 
     private final Tweet fTweet1 = new Tweet(user3, "I hate dummy data", date4);
@@ -111,6 +111,7 @@ public class ServerFacade {
     private List<Tweet> loginStory = new ArrayList<Tweet>(Arrays.asList(uTweet2, uTweet3, uTweet1));
 
     private final List<Tweet> registerFeed = Collections.emptyList();
+    //private final List<Tweet> registerFeed = loginFeed;
     private List<Tweet> registerStory = Collections.emptyList();
 
 
