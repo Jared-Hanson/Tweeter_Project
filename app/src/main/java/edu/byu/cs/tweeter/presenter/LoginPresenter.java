@@ -51,7 +51,9 @@ public class LoginPresenter implements LoginObserver {
      * @param loginRequest the request.
      */
     public LoginResponse login(LoginRequest loginRequest) throws IOException {
-        LoginService loginService = new LoginService();
+        LoginService loginService = getLoginService();
         return loginService.login(loginRequest);
     }
+
+    LoginService getLoginService() {return new LoginService();};
 }

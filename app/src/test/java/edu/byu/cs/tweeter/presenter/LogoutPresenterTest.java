@@ -25,8 +25,8 @@ public class LogoutPresenterTest {
         User currentUser = new User("FirstName", "LastName", null);
         AuthToken token = new AuthToken();
 
-        request = new LoginRequest(currentUser, token);
-        response = new LoginResponse(true, "success");
+        request = new LogoutRequest(currentUser, token);
+        response = new LogoutResponse(true, "success");
 
         mockLogoutService = Mockito.mock(LogoutService.class);
         Mockito.when(mockLogoutService.logout(request)).thenReturn(response);

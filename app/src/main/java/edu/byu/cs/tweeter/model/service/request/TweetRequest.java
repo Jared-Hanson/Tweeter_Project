@@ -1,6 +1,6 @@
 package edu.byu.cs.tweeter.model.service.request;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 import edu.byu.cs.tweeter.model.domain.User;
@@ -8,10 +8,10 @@ import edu.byu.cs.tweeter.model.domain.User;
 public class TweetRequest {
     private final User user;
     private final String tweetBody;
-    private final Date date;
+    private final LocalDate date;
 
 
-    public TweetRequest(User user, String tweetBody, Date date) {
+    public TweetRequest(User user, String tweetBody, LocalDate date) {
         this.user = user;
         this.tweetBody = tweetBody;
         this.date = date;
@@ -25,7 +25,7 @@ public class TweetRequest {
         return tweetBody;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
