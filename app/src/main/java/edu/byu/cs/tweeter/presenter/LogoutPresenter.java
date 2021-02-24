@@ -36,7 +36,9 @@ public class LogoutPresenter {
      * @param logoutRequest the request.
      */
     public LogoutResponse logout(LogoutRequest logoutRequest) throws IOException {
-        LogoutService logoutService = new LogoutService();
+        LogoutService logoutService = getLogoutService();
         return logoutService.logout(logoutRequest);
     }
+
+    LogoutService getLogoutService() {return new LogoutService();}
 }

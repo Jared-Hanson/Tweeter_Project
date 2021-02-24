@@ -31,8 +31,8 @@ public class LogoutPresenterTest {
         mockLogoutService = Mockito.mock(LogoutService.class);
         Mockito.when(mockLogoutService.logout(request)).thenReturn(response);
 
-        //presenter = Mockito.spy(new LogoutPresenter(new LogoutPresenter.View() {}));
-        //Mockito.when(presenter.getLogoutService()).thenReturn(mockLogoutService);
+        presenter = Mockito.spy(new LogoutPresenter(new LogoutPresenter.View() {}));
+        Mockito.when(presenter.getLogoutService()).thenReturn(mockLogoutService);
     }
 
     @Test
