@@ -109,6 +109,7 @@ public class FeedFragment extends Fragment implements FeedPresenter.View, GetUse
     public void getUserDataSuccessful(GetUserDataResponse getUserDataResponse) {
         //put function here
         Log.d("count", "getUserDataSuccessful: " + getUserDataResponse.getUser().getAlias());
+        User mentionedUser = getUserDataResponse.getUser();
     }
 
     @Override

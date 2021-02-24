@@ -107,6 +107,7 @@ public class StoryFragment extends Fragment implements StoryPresenter.View, GetU
     public void getUserDataSuccessful(GetUserDataResponse getUserDataResponse) {
         //put function here
         Log.d("count", "getUserDataSuccessful: " + getUserDataResponse.getUser().getAlias());
+        User mentionedUser = getUserDataResponse.getUser();
     }
 
     @Override
