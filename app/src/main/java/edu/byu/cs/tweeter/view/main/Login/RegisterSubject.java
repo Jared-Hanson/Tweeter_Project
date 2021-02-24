@@ -14,9 +14,9 @@ public class RegisterSubject extends Fragment {
         observerList.add(observer);
     }
 
-    void Notify(String first, String last, String username, String password) {
+    void Notify(String first, String last, String username, String password, boolean hasPicture) {
         for(RegisterObserver observer : observerList) {
-            observer.Update(this, first, last, username, password);
+            observer.Update(this, first, last, username, password, hasPicture);
         }
     }
 }
