@@ -62,7 +62,7 @@ public class FollowerServiceTest {
     }
 
     @Test
-    public void testGetFolloweers_validRequest_loadsProfileImages() throws IOException {
+    public void testGetFollowers_validRequest_loadsProfileImages() throws IOException {
         FollowerResponse response = followerServiceSpy.getFollowers(validRequest);
 
         for(User user : response.getFollowers()) {
