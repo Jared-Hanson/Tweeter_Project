@@ -70,7 +70,10 @@ public class ServerFacade {
 
 
     private List<User> loginFollowees = Arrays.asList(user1, user2, user3, user4, user5, user6, user7,
-            user8, user9, user10, user11, user12, user13, user14, user15, user16, user17, user18,
+             user9, user10, user11, user12, user13, user14, user15, user16, user17, user18,
+            user19, user20);
+    private List<User> allFollowees = Arrays.asList(user1, user2, user3, user4, user5, user6, user7, user8,
+            user9, user10, user11, user12, user13, user14, user15, user16, user17, user18,
             user19, user20);
 
     private final List<User> loginFollowers = Arrays.asList(user3, user4, user5, user6, user7, user15,
@@ -99,9 +102,9 @@ public class ServerFacade {
 
     private final Tweet fTweet1 = new Tweet(user3, "I hate dummy data", date4);
     private final Tweet fTweet2 = new Tweet(user5, "Who did that?", date5);
-    private final Tweet fTweet3 = new Tweet(user17, "Woah bruh", date6);
+    private final Tweet fTweet3 = new Tweet(user9, "Visit my page at " + user9.getAlias(), date6);
     private final Tweet fTweet4 = new Tweet(user1, "Go to https://www.byu.edu/", date7);
-    private final Tweet fTweet5 = new Tweet(user8, "Visit my page at " + user8.getAlias(), date8);
+    private final Tweet fTweet5 = new Tweet(user8, "Visit my page at (Not Someone you follow)" + user8.getAlias(), date8);
 
     private final List<Tweet> loginFeed = new ArrayList<Tweet>(Arrays.asList(fTweet2, fTweet3, fTweet4,
             fTweet5, fTweet1));
@@ -546,12 +549,12 @@ public class ServerFacade {
     }
 
     public GetUserDataResponse getUserFromAlias(String alias) {
-        for(User user : loginFollowees) {
+        for(User user : allFollowees) {
             if(user.getAlias().equals(alias)) {
                 return new GetUserDataResponse(user);
             }
         }
-        return null;
+        return new GetUserDataResponse(false, null);
     }
 
 }

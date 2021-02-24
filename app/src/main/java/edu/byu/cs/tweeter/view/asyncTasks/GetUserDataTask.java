@@ -1,12 +1,20 @@
 package edu.byu.cs.tweeter.view.asyncTasks;
 
 import android.os.AsyncTask;
+import android.os.Build;
+import android.util.Log;
 
+import androidx.annotation.RequiresApi;
+
+import java.io.IOException;
+
+import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.service.GetUserDataService;
 import edu.byu.cs.tweeter.model.service.request.GetUserDataRequest;
 import edu.byu.cs.tweeter.model.service.request.LoginRequest;
 import edu.byu.cs.tweeter.model.service.response.GetUserDataResponse;
 import edu.byu.cs.tweeter.model.service.response.LoginResponse;
+import edu.byu.cs.tweeter.util.ByteArrayUtils;
 
 public class GetUserDataTask extends AsyncTask<GetUserDataRequest, Void, GetUserDataResponse> {
     private final GetUserDataTask.Observer observer;
@@ -35,18 +43,35 @@ public class GetUserDataTask extends AsyncTask<GetUserDataRequest, Void, GetUser
         this.observer = observer;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected GetUserDataResponse doInBackground(GetUserDataRequest... getUserDataRequests) {
 
         GetUserDataResponse getUserDataResponse = null;
-        getUserDataResponse = service.getUserData(getUserDataRequests[0]);
+        try {
+            getUserDataResponse = service.getUserData(getUserDataRequests[0]);
+            if(getUserDataResponse.isSuccess()) {
+                loadImage(getUserDataResponse.getUser());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return getUserDataResponse;
     }
 
+    private void loadImage(User user) {
+        try {
+            byte [] bytes = ByteArrayUtils.bytesFromUrl(user.getImageUrl());
+            user.setImageBytes(bytes);
+        } catch (IOException e) {
+            Log.e(this.getClass().getName(), e.toString(), e);
+        }
+    }
+
     /**
      * Notifies the observer (on the thread of the invoker of the
-     * {@link #execute(GetUserDataResponse...)} method) when the task completes.
+     * {@link #(GetUserDataResponse...)} method) when the task completes.
      *
      * @param getUserDataResponse the response that was received by the task.
      */
