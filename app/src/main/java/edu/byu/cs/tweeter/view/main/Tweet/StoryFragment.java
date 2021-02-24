@@ -25,6 +25,7 @@ import androidx.annotation.RequiresApi;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -48,6 +49,7 @@ import edu.byu.cs.tweeter.presenter.StoryPresenter;
 import edu.byu.cs.tweeter.view.asyncTasks.GetFollowingTask;
 import edu.byu.cs.tweeter.view.asyncTasks.GetStoryTask;
 import edu.byu.cs.tweeter.view.asyncTasks.GetUserDataTask;
+import edu.byu.cs.tweeter.view.main.UserActivity;
 import edu.byu.cs.tweeter.view.main.following.FollowingFragment;
 import edu.byu.cs.tweeter.view.util.ImageUtils;
 
@@ -108,11 +110,24 @@ public class StoryFragment extends Fragment implements StoryPresenter.View, GetU
         //put function here
         Log.d("count", "getUserDataSuccessful: " + getUserDataResponse.getUser().getAlias());
         User mentionedUser = getUserDataResponse.getUser();
+        createUseActivity(mentionedUser);
     }
 
     @Override
     public void getUserDataUnsuccessful(GetUserDataResponse getUserDataResponse) {
         Toast.makeText(getActivity(), "Failed to get user data. " + getUserDataResponse.getMessage(), Toast.LENGTH_LONG).show();
+    }
+
+    public void createUseActivity(User mentionedUser) {
+        Intent intent = new Intent(getContext(), UserActivity.class);
+
+        intent.putExtra(UserActivity.CURRENT_USER_KEY, mentionedUser);
+        //intent.putExtra(UserActivity.CURRENT_USER_KEY, user);
+        intent.putExtra(UserActivity.AUTH_TOKEN_KEY, authToken);
+        intent.putExtra(UserActivity.LOGGED_IN_USER, user);
+
+
+        startActivity(intent);
     }
 
     /**

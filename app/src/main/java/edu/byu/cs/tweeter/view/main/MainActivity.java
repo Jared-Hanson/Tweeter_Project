@@ -91,8 +91,8 @@ public class MainActivity extends AppCompatActivity implements LogoutTask.Observ
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //createTweetPopUp();
-                createUserFeedTest();
+                createTweetPopUp();
+                //createUserFeedTest();
 
 
 
@@ -117,24 +117,7 @@ public class MainActivity extends AppCompatActivity implements LogoutTask.Observ
         followerCount.setText(getString(R.string.followerCount, 27));
         new getFollowerData().GetDataFunction(new FollowDataRequest(user));
     }
-    public void createUserFeedTest() {
-        Intent intent = new Intent(this, UserActivity.class);
 
-        String MALE_IMAGE_URL = "https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/donald_duck.png";
-        User user1 = new User("Allen", "Anderson", MALE_IMAGE_URL);
-
-        File file = new File("app/src/main/res/drawable/donald_duck.png");
-        byte[] arr = readContentIntoByteArray(file);
-        user1.setImageBytes(arr);
-
-        intent.putExtra(UserActivity.CURRENT_USER_KEY, user1);
-        //intent.putExtra(UserActivity.CURRENT_USER_KEY, user);
-        intent.putExtra(UserActivity.AUTH_TOKEN_KEY, authToken);
-        intent.putExtra(UserActivity.LOGGED_IN_USER, user);
-
-
-        startActivity(intent);
-    }
     // only needed for testing with specific users here
     private static byte[] readContentIntoByteArray(File file)
     {
