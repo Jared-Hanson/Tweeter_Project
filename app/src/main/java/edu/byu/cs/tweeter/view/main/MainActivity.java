@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements LogoutTask.Observ
         logoutToast = Toast.makeText(this, "logging out", Toast.LENGTH_LONG);
         logoutToast.show();
 
-        LogoutPresenter logoutPresenter = new LogoutPresenter(getCurrentFocus());
+        LogoutPresenter logoutPresenter = new LogoutPresenter();
 
         LogoutRequest logoutRequest = new LogoutRequest(user, authToken);
         LogoutTask logoutTask = new LogoutTask(logoutPresenter, this);

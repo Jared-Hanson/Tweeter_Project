@@ -1,5 +1,6 @@
 package edu.byu.cs.tweeter.presenter;
 
+import android.util.Log;
 import android.view.View;
 
 import java.io.IOException;
@@ -10,8 +11,12 @@ import edu.byu.cs.tweeter.model.service.response.LogoutResponse;
 
 public class LogoutPresenter {
 
-    private View view;
 
+    private LogoutPresenter.View view = null;
+
+    public interface View{
+        // this is where we need to add functions to update the view if there are more tweets added or more followers added.
+    }
     /**
      * Creates an instance.
      *
@@ -19,6 +24,10 @@ public class LogoutPresenter {
      */
     public LogoutPresenter(View view) {
         this.view = view;
+    }
+
+    public LogoutPresenter() {
+
     }
 
     /**
