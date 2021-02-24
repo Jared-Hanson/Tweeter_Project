@@ -34,9 +34,9 @@ public class TweetRequest {
         if (this == o) return true;
         if (!(o instanceof TweetRequest)) return false;
         TweetRequest that = (TweetRequest) o;
-        return getUser().equals(that.getUser()) &&
-                getTweetBody().equals(that.getTweetBody()) &&
-                getDate().equals(that.getDate());
+        return Objects.equals(getUser(), that.getUser()) &&
+                Objects.equals(getTweetBody(), that.getTweetBody()) &&
+                Objects.equals(getDate(), that.getDate());
     }
 
     @Override

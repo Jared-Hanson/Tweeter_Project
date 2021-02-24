@@ -16,7 +16,7 @@ public class FollowDataRequest {
         if (this == o) return true;
         if (!(o instanceof FollowDataRequest)) return false;
         FollowDataRequest that = (FollowDataRequest) o;
-        return getUser().equals(that.getUser());
+        return Objects.equals(getUser(), that.getUser());
     }
 
     @Override

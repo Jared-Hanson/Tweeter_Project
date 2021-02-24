@@ -25,6 +25,7 @@ public class StoryServiceTest {
 
     private StoryService storyServiceSpy;
 
+
     @BeforeEach
     public void setup() {
         User currentUser = new User("FirstName", "LastName", null);
@@ -49,12 +50,12 @@ public class StoryServiceTest {
         invalidRequest = new StoryRequest(null, 0, null);
 
         // Setup a mock ServerFacade that will return known responses
-        successResponse = new StoryResponse(Arrays.asList(resultTweet1, resultTweet2, resultTweet3), false);
+        successResponse = new StoryResponse(true, Arrays.asList(resultTweet1, resultTweet2, resultTweet3), false);
         ServerFacade mockServerFacade = Mockito.mock(ServerFacade.class);
-        Mockito.when(mockServerFacade.getFeed(validRequest)).thenReturn(successResponse);
+        Mockito.when(mockServerFacade.getStory(validRequest)).thenReturn(successResponse);
 
         failureResponse = new StoryResponse("An exception occurred");
-        Mockito.when(mockServerFacade.getFeed(invalidRequest)).thenReturn(failureResponse);
+        Mockito.when(mockServerFacade.getStory(invalidRequest)).thenReturn(failureResponse);
 
         // Create a FollowingService instance and wrap it with a spy that will use the mock service
         storyServiceSpy = Mockito.spy(new StoryService());

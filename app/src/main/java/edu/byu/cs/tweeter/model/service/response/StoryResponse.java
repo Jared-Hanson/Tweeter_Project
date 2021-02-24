@@ -19,6 +19,11 @@ public class  StoryResponse extends PagedResponse{
         this.tweets = tweets;
     }
 
+    public StoryResponse(boolean success, List<Tweet> tweets, boolean hasMorePages) {
+        super(success, hasMorePages);
+        this.tweets = tweets;
+    }
+
     public List<Tweet> getTweets() {
         return tweets;
     }
@@ -29,6 +34,11 @@ public class  StoryResponse extends PagedResponse{
         if (!(o instanceof StoryResponse)) return false;
         StoryResponse that = (StoryResponse) o;
         return getTweets().equals(that.getTweets());
+    }
+
+    public StoryResponse(boolean success) {
+        super(success);
+        tweets = null;
     }
 
     @Override

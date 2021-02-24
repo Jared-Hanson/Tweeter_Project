@@ -1,6 +1,11 @@
 package edu.byu.cs.tweeter.model.service;
 
 
+import android.os.Build;
+import android.util.Log;
+
+import androidx.annotation.RequiresApi;
+
 import java.io.IOException;
 
 import edu.byu.cs.tweeter.model.domain.Tweet;
@@ -15,8 +20,10 @@ import edu.byu.cs.tweeter.util.ByteArrayUtils;
 
 public class StoryService {
 
+
     public StoryResponse getStory(StoryRequest request) throws IOException {
         StoryResponse response = getServerFacade().getStory(request);
+
 
         if(response.isSuccess()) {
             loadImages(response);
@@ -30,7 +37,8 @@ public class StoryService {
             tweet.getAuthor().setImageBytes(bytes);
         }
     }
-    ServerFacade getServerFacade() {
-        return new ServerFacade();
-    }
+
+
+
+    ServerFacade getServerFacade() { return new ServerFacade(); }
 }

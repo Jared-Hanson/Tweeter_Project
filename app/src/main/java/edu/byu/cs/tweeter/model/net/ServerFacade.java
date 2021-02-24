@@ -108,12 +108,14 @@ public class ServerFacade {
 
     private final List<Tweet> loginFeed = new ArrayList<Tweet>(Arrays.asList(fTweet2, fTweet3, fTweet4,
             fTweet5, fTweet1));
-    private List<Tweet> loginStory = new ArrayList<Tweet>(Arrays.asList(uTweet2, uTweet3, uTweet1));
+    private final List<Tweet> loginStory = new ArrayList<Tweet>(Arrays.asList(uTweet2, uTweet3, uTweet1));
 
     private final List<Tweet> registerFeed = Collections.emptyList();
     //private final List<Tweet> registerFeed = loginFeed;
-    private List<Tweet> registerStory = Collections.emptyList();
+    private final List<Tweet> registerStory = Collections.emptyList();
 
+    public ServerFacade() {
+    }
 
     /**
      * Performs a login and if successful, returns the logged in user and an auth token. The current
@@ -252,7 +254,7 @@ public class ServerFacade {
             hasMorePages = tweetIndex < allTweets.size();
         }
 
-        return new StoryResponse(responseTweets, hasMorePages);
+        return new StoryResponse(true, responseTweets, hasMorePages);
     }
     public StoryResponse getFeed(StoryRequest request) {
 
@@ -284,7 +286,7 @@ public class ServerFacade {
             hasMorePages = tweetIndex < allTweets.size();
         }
 
-        return new StoryResponse(responseTweets, hasMorePages);
+        return new StoryResponse(true, responseTweets, hasMorePages);
     }
 
     private int getTweetStartingIndex(Tweet lastTweet, List<Tweet> allTweets) {
@@ -330,13 +332,7 @@ public class ServerFacade {
                 alias.equals(user18.getAlias())||
                 alias.equals(user19.getAlias())||
                 alias.equals(user20.getAlias())) {
-            List<Tweet> returnList = Collections.emptyList();
-            for (int i = 0; i < loginFeed.size(); i++) {
-                if (loginFeed.get(i).getAuthor().equals(alias)) {
-                    returnList.add(loginFeed.get(i));
-                }
-            }
-            return returnList;
+            return loginStory;
         }
         else {
             return registerStory;
@@ -366,7 +362,7 @@ public class ServerFacade {
                 alias.equals(user18.getAlias())||
                 alias.equals(user19.getAlias())||
                 alias.equals(user20.getAlias())) {
-            return loginStory;
+            return loginFeed;
         }
         else {
             return registerFeed;

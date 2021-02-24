@@ -17,6 +17,11 @@ public class PagedResponse extends Response {
         this.hasMorePages = hasMorePages;
     }
 
+    public PagedResponse(boolean success) {
+        super(success);
+        hasMorePages = false;
+    }
+
     /**
      * An indicator of whether more data is available from the server. A value of true indicates
      * that the result was limited by a maximum value in the request and an additional request
